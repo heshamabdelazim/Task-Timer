@@ -1,0 +1,326 @@
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+IS:wght@100..400&display=swap');
+/* ========== file - content ==========  
+
+- defulat 
+- background design 
+- App design
+- input design
+- ul design
+- li design
+- 
+
+*/
+
+/* ========== defulat ========== */
+body{
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+:root{
+  --color1: #B1C1B6;
+  --color2: #63818C;
+  --color3: #446173;
+  --color4: #1E3D59;
+  --color5: #1E3D59;
+  --transition: 0.6s;
+}
+
+/* ========== App design ========== */
+.to-do{
+  background: var(--color1);
+  padding-top: 50px;
+  min-height: 100vh;
+}
+.to-do .parent{
+  padding: 1rem;
+  background-color:var(--color4); 
+  border-top-right-radius: 30%;
+}
+.to-do h1{
+  color: var(--color2);
+}
+
+/* ========== input design ========== */
+
+.to-do .parent form{
+  width: 70%;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.to-do .parent form input[type="text"]{
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.4rem;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  color: var(--color1);
+  background-color: var(--color3); /*field*/
+}
+.to-do .parent form input[type="text"]::placeholder{
+  color: var(--color4);
+  text-transform: capitalize;
+  transition: var(--transition);
+  font-weight: 600;
+}
+.to-do .parent form input[type="text"]:focus::placeholder{
+  opacity: 0;
+}
+.to-do .parent form input[type="submit"]{
+  background-color: var(--color3);
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  text-transform: capitalize;
+  font-size: 1.2rem;
+}
+
+/* ========== ul design ========== */
+.to-do .parent ul{
+  list-style: none;   
+  padding: 2rem;
+  background-color: var(--color3);
+  border: 1rem solid var(--color2);
+  background: radial-gradient(var(--color2), transparent);
+  min-height: 21rem;
+}
+/* ========== li design ========== */
+
+.to-do  .list li{
+  font-size: 2rem;
+  color: var(--color1);
+  padding: 0.8rem 0;
+}
+.to-do .parent ul li:not(:last-child){
+  border-bottom: 2px solid black;
+}
+/* .to-do .parent ul li input[type="number"]{
+  width: 5rem;
+  text-align: center;
+  padding: 0 0.5rem;
+} */
+
+.to-do .parent ul li .controls span{
+  padding: 0.2rem;
+  border-radius: 40%;
+  font-size: 1.5rem;
+  border: 2px solid var(--color2);
+  /* color: green; */
+  cursor: pointer;
+  transition: var(--transition);
+}
+.to-do .parent ul li .controls span:hover{
+  color: var(--color5);
+  scale: 1.1;
+}
+.to-do .parent ul li .controls span.icon-stopwatch:hover{
+  background-color: var(--color2);
+}
+.to-do .parent ul li .controls span.icon-checkmark:hover{
+  background-color: rgb(106 181 106);
+}
+.to-do .parent ul li .controls span.icon-moon:hover{
+  background-color: #ff8484;;
+}
+
+/* ========== clock design ========== */
+
+
+
+
+
+/* 
+.to-do .grand-parent{
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  gap: 30px;
+  margin-top: 30px;
+}
+.to-do{
+  background: linear-gradient( transparent, #2ce43a85, transparent);
+  padding: 100px 0;
+}
+@media (max-width: 767px){
+  .to-do .grand-parent{
+      grid-template-columns: none;
+  }
+}
+.to-do .parent-task{
+  background-color: lightgreen;
+  padding: 20px;
+  border-radius: 10px;
+  border: 5px solid #93a0f1;
+}
+.to-do .parent-task >h4{
+  text-align: center;
+  font-size: 40px;
+  text-transform: uppercase;
+  color: darkgreen;
+}
+@media (max-width:767px){
+  .to-do .parent-task >h4{
+      font-size: 30px;
+
+  }
+}
+.to-do .parent-task .input-parent{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 25px;
+  margin-top: 20px;
+  position: relative;
+}
+.to-do .parent-task input{
+  width: 100%;
+  padding: 15px 90px 15px 15px;
+  font-size: 20px;
+  text-transform: capitalize;
+  overflow-x: hidden;
+}
+@media (max-width: 767px){
+  .to-do .parent-task input{
+      font-size: 14px;
+  }
+}
+.to-do .input-parent span{
+  padding: 5px 10px;
+  text-transform: capitalize;
+  color: white;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  background-color: #93a0f1;
+  position: absolute;
+  right: 5%;
+  cursor: pointer;
+}
+.to-do .parent-task input:focus{
+  outline: none;
+}
+.to-do .parent-task input:focus::placeholder{
+  transition: 0.4s;
+  opacity: 0;
+}
+.to-do .msg{
+  margin: 30px auto;
+  height: 50px;
+  background-color: white;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.to-do .msg p{
+  font-size: 20px;
+  color: #93a0f1;
+  opacity: 1;
+  text-align: center;
+}
+@media (max-width:767px){
+  .to-do .msg p{
+      font-size: 20px;
+  }
+}
+
+.to-do .parent-task .list-result{
+  margin-top: 50px;
+  background-color: white;
+  padding: 30px 20px 20px;
+  position: relative;
+}
+.to-do .list-result h4{
+  font-size: 25px;
+  background-color: white;
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px;
+  border-radius: 50%;
+}
+.to-do .list-result .task-container{
+  flex-direction: column;
+  gap: 30px;
+  min-height: 50px;
+  position: relative;
+  overflow: hidden;
+}
+.to-do .list-result .task-container > p{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  color: orange;
+  text-align: center;
+}
+@media (max-width: 767px){
+  .to-do .list-result .task-container > p{
+      font-size: 20px;
+  }
+}
+.to-do .list-result .task-bar{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #caffce;
+  padding: 10px 10px 10px 20px;
+  border-radius: 10px;
+  margin: auto;
+  margin-bottom: 30px;
+  position: relative;
+}
+.to-do .list-result .task-bar:last-child{
+  margin-bottom: 0;
+}
+.to-do .list-result .task-bar .buttons{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  text-align: center;
+  cursor: pointer;
+}
+.to-do .list-result .task-bar p{
+  font-size: 25px;
+}
+.to-do .list-result .task-bar span{
+  padding: 5px 10px;
+  text-transform: capitalize;
+  color: white;
+  border-radius: 5px;
+}
+.to-do .list-result .task-bar span.delete{
+  background-color: red;
+}
+.to-do .list-result .task-bar span.complete{
+  background-color: #00d900;
+}
+.to-do .results{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+@media (max-width: 767px){
+  .to-do .results{
+      flex-direction:row;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+  }
+
+}
+.to-do .results .result-box{
+  background-color: lightgreen;
+  padding: 10px;
+  border-radius: 10px;
+  width: 100%;
+}
+.to-do .results .box-completed{
+  border: 3px solid #00d900;
+}
+.to-do .results .box-deleted{
+  border: 3px solid red;
+} */

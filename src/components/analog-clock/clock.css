@@ -1,0 +1,17 @@
+.to-do .parent .clock{
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: var(--color3);
+    border: 3px solid white;
+
+}
+.to-do .parent .clock span{
+position: absolute;
+font-weight: bold;
+color: orange;
+inset: 12px;
+text-align: center;
+}
