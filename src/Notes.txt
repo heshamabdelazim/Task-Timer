@@ -1,0 +1,11 @@
+this task-timer will do the following:
+
+- when the user enter his task ? 
+	there will be controls like (check icon). This to delete the task
+	another control is (set time icon) This to put time estimated for example (making Coffe. It may take 20 min)
+
+# How this app will work? 
+ - user read the clock then he will see the head
+ - Adding his task
+ - when the user click on the (set time button) it will open a window that has timer
+	
