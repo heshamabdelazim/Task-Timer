@@ -2,10 +2,17 @@ this task-timer will do the following:
 
 - when the user enter his task ? 
 	there will be controls like (check icon). This to delete the task
-	another control is (set time icon) This to put time estimated for example (making Coffe. It may take 20 min)
+	another control is (set time icon) This to put time estimated. For example (making Coffe. It may take 20 min)
 
-# How this app will work? 
- - user read the clock then he will see the head
- - Adding his task
- - when the user click on the (set time button) it will open a window that has timer
-	
+=================================================	
+
+#logic 
+
+ - Every task will be object. This object will contain {taskName: "" , timerStart: number}
+ - after the user added his task, he will click on (timer icon ) Then, a Dom will be opened to show his task and his time set
+ - when the user enter his task and pressed the (timer icon) it will setShowTime(has task Object , ind) then open that Dom. 
+ 	Inside that timer dom, when the user press cancel => setShowTime(null)
+	Inside that timer dom, when the user press Ok => firstly filter that Dom and adding new dom OOORRR reest in the array
+ - If the user tried to click on another (timer icon)	He will find a message to complete his (task name) first
+ - How will we do this? By looping inside the array if he found inside an object (timer start) The loop will stop and (sorry)
+ - Train your self on useContext() When you want to send probs

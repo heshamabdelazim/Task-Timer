@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import "./clock.css";
 
-const Clock = () => {
+const Clock = ({ show }) => {
   const jsxArray = [];
-
   // ========useState
   let [hours, setHours] = useState();
   // ========useEffect
@@ -27,7 +26,12 @@ const Clock = () => {
   }, []);
   // why we use Effect ? because the loop alawys work if any renderes so we stop it
   // Now we got array includes 12 span
-  return <section className="clock position-absolute">{hours}</section>;
+  return (
+    <section className={`clock position-relative ${show ? "showTimer" : ""}`}>
+      {hours}
+      <h5 className="position-absolute">{new Date().getFullYear()}</h5>
+    </section>
+  );
 };
 
 export default Clock;

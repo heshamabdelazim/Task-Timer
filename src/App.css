@@ -27,31 +27,61 @@ body{
   --transition: 0.6s;
 }
 
-/* ========== App design ========== */
+/* button design */
+.button{
+  background-color: var(--color2);
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  text-transform: capitalize;
+  font-size: 1.2rem;
+  flex: 1 10%;
+  transition: var(--transition);
+  color: var(--color1);
+}
+
+/* ========== background design ========== */
 .to-do{
   background: var(--color1);
   padding-top: 50px;
   min-height: 100vh;
 }
+/* ========== App design ========== */
 .to-do .parent{
   padding: 1rem;
   background-color:var(--color4); 
   border-top-right-radius: 30%;
 }
+.to-do .parent .info{
+  display: flex;
+  justify-content: space-between;
+  /* align-items: center; */
+  gap: 1rem;
+}
+
+.to-do .parent .info .left{
+  flex: 1 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .to-do h1{
   color: var(--color1);
 }
-.to-do h1 + span{
+.to-do .slogan > span{
   background: linear-gradient(to right, white , var(--color2) 80%);
   color: transparent;
   background-clip: text;
   font-size: 1.3rem;
 }
-.to-do h1 + span + span{
+
+
+.to-do .slogan span + span{
   color: orange;
   font-size: 1.3rem;
   display: inline-block;
-  text-shadow: 0px 0px 4px orange, 0 0 13px orange;
+  /* text-shadow: 0px 0px 4px orange, 0 0 13px orange; */
   text-transform: uppercase;
   animation: glow 1.5s alternate infinite;
 }
@@ -59,7 +89,7 @@ body{
 /* ========== input design ========== */
 
 .to-do .parent form{
-  width: 70%;
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   /* justify-content: space-between; */
@@ -67,6 +97,7 @@ body{
 }
 .to-do .parent form input[type="text"]{
   width: 100%;
+  font-weight: 500;
   padding: 1rem;
   font-size: 1.4rem;
   border-radius: 6px;
@@ -88,17 +119,7 @@ body{
 .to-do .parent form input[type="text"]:focus::placeholder{
   opacity: 0;
 }
-.to-do .parent form input[type="submit"]{
-  background-color: var(--color2);
-  border: none;
-  border-radius: 6px;
-  font-weight: 500;
-  text-transform: capitalize;
-  font-size: 1.2rem;
-  flex: 1 10%;
-  transition: var(--transition);
-  color: var(--color1);
-}
+
 .to-do .parent form input[type="submit"].forbidden{
   cursor: not-allowed;
   opacity: 0.3;
@@ -164,23 +185,89 @@ body{
   justify-content: center;
   align-items: center;
   backdrop-filter: blur(5px);
-  filter: opacity();
+  animation: opening 0.4s forwards;
 }
+
 .to-do .timer-dom{
   padding: 1rem;
-  /* position: fixed;
-  top: 50%;
-  left: 50%; */
-
-  width: 80%;
-  height: 80%;
-  background-color: green;
-
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 90%;
+  background: radial-gradient(var(--color2), var(--color3));
+  box-shadow: 0px 0px 20px 4px var(--color4);
+  animation: opening var(--transition) forwards;
+  overflow: auto;
+}
+.to-do .timer-dom h3{
+  width: 290px;
+  text-align: center;
+  background: radial-gradient(orange, var(--color1));
+  color: transparent;
+  background-clip: text;
+  line-height: 2.6rem;
 }
 
+.to-do .timer-dom .clock-set{
+  flex-direction: column-reverse;
+  gap: 2rem;
+}
+
+.to-do .timer-dom .clock-set h5{
+  color: var(--color1);
+  margin-bottom: 1.4rem;
+}
+
+.to-do .timer-dom .inputs{
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+
+.to-do .timer-dom .inputs :where(input, select) {
+  width: 120px;
+  padding: 1rem 0rem;
+  border-radius: 6px;
+  border: none;
+  text-align: center;
+  font-size: 1.2rem;
+  background-color: var(--color3);
+  color: var(--color1);
+  font-weight: 500;
+}
+.to-do .timer-dom .inputs :where(input, select):focus{
+  outline: none;
+}
+
+.to-do .timer-dom .close-control{
+  display: flex;
+  gap: 1rem;
+}
+.to-do .timer-dom .close-control :where( button#cancel, button#ok){
+  background-color: var(--color2);
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  text-transform: capitalize;
+  font-size: 1.2rem;
+  flex: 1 10%;
+  transition: var(--transition);
+  color: var(--color1);
+}
 
 /* ========== animation ========== */
 @keyframes glow {
   from{text-shadow: 0 0 4px orange;}
   to{text-shadow: 0px 0px 4px orange, 0 0 13px orange;}
 }
+ @keyframes opening {
+  from{
+    opacity: 0;
+    scale: 0.9;
+    }
+  to{
+    opacity: 1;
+    scale: 1;
+  }
+ }
