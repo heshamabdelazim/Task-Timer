@@ -137,6 +137,7 @@ body{
   min-height: 21rem;
   height: 21rem;
   overflow: auto;
+  position: relative;
 }
 
 /* ========== li design ========== */
@@ -186,6 +187,7 @@ body{
   align-items: center;
   backdrop-filter: blur(5px);
   animation: opening 0.4s forwards;
+  z-index: 2;
 }
 
 .to-do .timer-dom{
@@ -202,10 +204,13 @@ body{
 .to-do .timer-dom h3{
   width: 290px;
   text-align: center;
-  background: radial-gradient(orange, var(--color1));
+  background: radial-gradient(orange, lightgreen);
   color: transparent;
   background-clip: text;
   line-height: 2.6rem;
+  animation: bg 1.2s infinite linear;
+  background-size: 72% 100%;
+  text-transform: uppercase;
 }
 
 .to-do .timer-dom .clock-set{
@@ -213,9 +218,9 @@ body{
   gap: 2rem;
 }
 
-.to-do .timer-dom .clock-set h5{
-  color: var(--color1);
+.to-do .timer-dom .clock-set h4{
   margin-bottom: 1.4rem;
+  color: var(--color1);
 }
 
 .to-do .timer-dom .inputs{
@@ -262,12 +267,18 @@ body{
   to{text-shadow: 0px 0px 4px orange, 0 0 13px orange;}
 }
  @keyframes opening {
-  from{
-    opacity: 0;
-    scale: 0.9;
+   from{
+     opacity: 0;
+     scale: 0.9;
     }
-  to{
-    opacity: 1;
-    scale: 1;
+    to{
+      opacity: 1;
+      scale: 1;
+    }
   }
- }
+@keyframes bg {
+  0%{background-position: 0 0;}
+  100%{background-position: 250% 250%;}
+}
+
+

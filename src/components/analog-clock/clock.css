@@ -14,16 +14,70 @@
     background-color: var(--color3);
     border: 3px solid white;
     overflow: hidden;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 0px 10px 3px var(--color3);
 }
 
-
-.to-do .parent .clock span{
+.to-do .parent .clock > span{
     position: absolute;
-    font-weight: bold;
+    font-weight: 500;
     color: orange;
-    inset: 12px;
+    inset: 6px;
+    font-size: 20px;
     text-align: center;
 }
+
+/* ========== indicators ============ */
+
+.to-do .parent .clock .indicator{
+    width: 6px;
+    height: 6px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.to-do .parent .clock .indicator::before{
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    border-radius: 50%;
+    z-index: 2;
+    outline: 2px solid orange;
+}
+
+.to-do .parent .clock .indicator span{
+    position: absolute;
+    border-radius: 40px;
+    transform-origin: bottom;
+    z-index: 1;
+    bottom: 50%;
+}
+
+.to-do .parent .clock .indicator span.sec{
+    width: 1px;
+    height: 60px;
+    background-color: orange;
+}
+.to-do .parent .clock .indicator span.min{
+    width: 4px;
+    height: 70px;
+    background-color: var(--color1);
+}
+.to-do .parent .clock .indicator span.hr{
+    width: 5px;
+    height: 40px;
+    background-color: white;
+}
+
+
+
+
 .to-do .parent .clock h5{
     top: 50%;
     left: 50%;
@@ -32,6 +86,8 @@
     letter-spacing: 0.3rem;
     font-size: 3rem;
 }
+
+
 
 /* ========== incase showDom ========== */
 
@@ -46,4 +102,22 @@
 
 .to-do .parent .clock.showTimer h5{
     font-size: 4rem;
+}
+
+.to-do .parent .clock.showTimer .indicator span.sec{
+    width: 2px;
+    height: 100px;
+    background-color: orange;
+}
+
+.to-do .parent .clock.showTimer .indicator span.min{
+    width: 5px;
+    height: 105px;
+    background-color: var(--color1);
+}
+
+.to-do .parent .clock.showTimer .indicator span.hr{
+    width: 6px;
+    height: 57px;
+    background-color: white;
 }

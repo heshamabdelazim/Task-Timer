@@ -20,12 +20,13 @@ function App() {
   // ========= useState
   let [tasks, setTasks] = useState([]),
     [showTime, setShowTime] = useState(null),
-    [numberinput, setNumberInput] = useState({ timeSet: "minute", timer: 1 });
+    [numberInput, setNumberInput] = useState({ timeSet: "minute", timer: 5 });
 
   // ============function
   function resetting() {
     inputTextDom.current.value = "";
-    inputTextDom.current.focus();
+    !showTime && inputTextDom.current.focus();
+    // inputTextDom.current.focus();
     inputText.current = "";
     submitDom.current.classList.add("forbidden");
   }
@@ -60,7 +61,7 @@ function App() {
 
   // ============function
 
-  console.log(numberinput);
+  console.log(numberInput);
   return (
     <div className="to-do">
       <Container>
@@ -123,7 +124,7 @@ function App() {
               })
             ) : (
               <h2 style={{ color: "var(--color5)" }}>
-                Why are you lazy useless? 🐌
+                Why are you lazy poor useless? 🐌
               </h2>
             )}
           </ul>
@@ -133,16 +134,16 @@ function App() {
                 <h3>{showTime.task}</h3>
                 <div className="clock-set d-flex align-items-center justify-content-around ">
                   <div className="w-100">
-                    <h5 className="text-center">How long the Task may take?</h5>
+                    <h4 className="text-center">How long the Task may take?</h4>
                     <div className="inputs">
                       <input
                         type="number"
                         min="1"
                         placeholder="Time"
-                        value={numberinput.timer}
+                        value={numberInput.timer}
                         onChange={(e) =>
                           setNumberInput({
-                            timeSet: numberinput.timeSet,
+                            timeSet: numberInput.timeSet,
                             timer: e.target.value,
                           })
                         }
@@ -152,7 +153,7 @@ function App() {
                         onChange={(e) =>
                           setNumberInput({
                             timeSet: e.target.value,
-                            timer: numberinput.timer,
+                            timer: numberInput.timer,
                           })
                         }
                       >
@@ -163,7 +164,7 @@ function App() {
                       </select>
                     </div>
                   </div>
-                  <Clock show={true} />
+                  <Clock show={true} taskDuration={numberInput} />
                 </div>
                 <div className="close-control ">
                   <button
