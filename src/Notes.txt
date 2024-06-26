@@ -15,4 +15,4 @@ this task-timer will do the following:
 	Inside that timer dom, when the user press Ok => firstly filter that Dom and adding new dom OOORRR reest in the array
  - If the user tried to click on another (timer icon)	He will find a message to complete his (task name) first
  - How will we do this? By looping inside the array if he found inside an object (timer start) The loop will stop and (sorry)
- - Train your self on useContext() When you want to send probs
+ - when the user press OK

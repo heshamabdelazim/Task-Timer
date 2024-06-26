@@ -9,18 +9,25 @@ function App() {
   // ========useRef
   let inputText = useRef(),
     inputTextDom = useRef(),
-    submitDom = useRef();
+    submitDom = useRef(),
+    taskId = useRef(0),
+    taskOnProgress = useRef(null),
+    taskTiming = useRef((min = 5, hr = 0) => {
+      return { min, hr };
+    });
 
   // ===========useEffect
   useEffect(() => {
     resetting();
     inputTextDom.current.addEventListener("input", buttonValidation);
+    getOnProgTask();
+    // countDown();
   });
 
   // ========= useState
   let [tasks, setTasks] = useState([]),
     [showTime, setShowTime] = useState(null),
-    [numberInput, setNumberInput] = useState({ timeSet: "minute", timer: 5 });
+    [numberInput, setNumberInput] = useState(taskTiming.current());
 
   // ============function
   function resetting() {
@@ -46,22 +53,85 @@ function App() {
         ...tasks,
         {
           task: inputText.current,
-          startTime: null,
+          taskDur: null,
+          id: ++taskId.current,
         },
       ]);
   }
+  // ============function  (re-useable)
+  function getOnProgTask() {
+    // Every render this function will get the task that user chose
+    let onProgressTask = tasks.find((taskObj) => taskObj.taskDur);
+    taskOnProgress.current = onProgressTask ? onProgressTask : null;
+  }
 
-  // ============function
-  const tasksFilter = (ind) => {
-    // This function will return after filteration of array of tasks
-    return tasks.filter((taskO, i) => {
-      return i !== ind;
+  // ============function  (re-useable)
+  const tasksFilter = (id) => {
+    // This function  is re-usable, will return the rest of objects
+    return tasks.filter((taskO) => {
+      return taskO.id !== id;
     });
   };
 
   // ============function
+  function clockItemClicked(taskObj) {
+    // This function when the user press (time item).
+    //Task coundown or not. It will function
 
-  console.log(numberInput);
+    if (taskOnProgress.current) {
+      taskOnProgress.current.id === taskObj.id
+        ? setShowTime(taskObj)
+        : setShowTime({
+            h2: "Sorry, Concentrate on one task",
+            taskOnProgress,
+          });
+    } else {
+      console.log(taskTiming.current());
+      numberInput.min = taskObj.taskDur
+        ? taskObj.taskDur.min
+        : taskTiming.current().min;
+      numberInput.hr = taskObj.taskDur
+        ? taskObj.taskDur.hr
+        : taskTiming.current().hr;
+      setShowTime(taskObj);
+    }
+  }
+
+  // ============function
+  function okClicked() {
+    // This function will work when the uesr Press Ok or delete
+    if (showTime.task) {
+      showTime.taskDur = numberInput;
+      console.log(showTime);
+      tasks.map((taskObj) => {
+        if (taskObj.id == showTime.id) {
+          taskObj = showTime;
+        }
+      });
+    } else {
+      const onProgressObj = tasks.find((tasksObj) => tasksObj.taskDur);
+      const restTasks = tasksFilter(onProgressObj.id);
+      setTasks(restTasks);
+    }
+    setShowTime(null);
+  }
+
+  // ============function
+  function countDown() {
+    let isTaskFunction = tasks.find((taskObj) => taskObj.taskDur);
+    isTaskFunction && console.log(isTaskFunction, "this is isTaskFunction");
+    let beso = 5;
+    return beso--;
+  }
+
+  // ============function
+  function overview() {
+    console.table(tasks);
+    console.log(showTime, "showTime");
+    console.log(numberInput, "numberInput");
+  }
+  overview();
+
   return (
     <div className="to-do">
       <Container>
@@ -104,19 +174,37 @@ function App() {
             {tasks.length !== 0 ? (
               tasks.map((taskObj, ind) => {
                 return (
-                  <li key={ind} className="d-flex justify-content-between">
-                    <span>{taskObj.task}</span>
+                  <li
+                    key={taskObj.id}
+                    className={
+                      "d-flex justify-content-between align-items-center"
+                    }
+                  >
+                    <div className="d-flex justify-content-center align-items-center gap-3">
+                      <span className={`${taskObj.taskDur ? "active" : ""}`}>
+                        {ind + 1}- {taskObj.task}
+                      </span>
+                      {taskObj.taskDur && (
+                        <>
+                          {" - "}
+                          <span className="tm rounded p-2">
+                            Time Left: {taskObj.taskDur.hr} :{" "}
+                            {taskObj.taskDur.min}
+                          </span>
+                        </>
+                      )}
+                    </div>
                     <div className="controls d-flex align-items-center gap-4">
                       <span
                         className="icon-stopwatch"
                         title="Set Time"
                         onClick={() => {
-                          setShowTime(taskObj, ind);
+                          clockItemClicked(taskObj);
                         }}
                       />
                       <span
                         className="icon-checkmark"
-                        onClick={() => setTasks(tasksFilter(ind))}
+                        onClick={() => setTasks(tasksFilter(taskObj.id))}
                       />
                     </div>
                   </li>
@@ -130,42 +218,67 @@ function App() {
           </ul>
           {showTime && (
             <div className="timer-background ">
-              <section className="timer-dom position-relative">
-                <h3>{showTime.task}</h3>
-                <div className="clock-set d-flex align-items-center justify-content-around ">
-                  <div className="w-100">
-                    <h4 className="text-center">How long the Task may take?</h4>
-                    <div className="inputs">
-                      <input
-                        type="number"
-                        min="1"
-                        placeholder="Time"
-                        value={numberInput.timer}
-                        onChange={(e) =>
-                          setNumberInput({
-                            timeSet: numberInput.timeSet,
-                            timer: e.target.value,
-                          })
-                        }
-                      />
-                      <select
-                        id=""
-                        onChange={(e) =>
-                          setNumberInput({
-                            timeSet: e.target.value,
-                            timer: numberInput.timer,
-                          })
-                        }
-                      >
-                        <option value="hours">HRs</option>
-                        <option value="minutes" selected>
-                          MINs
-                        </option>
-                      </select>
+              <section
+                className={`timer-dom position-relative ${
+                  !showTime.task && "justify-content-around h-75"
+                }`}
+              >
+                {showTime.task ? (
+                  <>
+                    <h3 className="active">{showTime.task}</h3>
+                    <div className="clock-set d-flex align-items-center justify-content-around ">
+                      <div className="w-100">
+                        <h4 className="text-center">
+                          How long the Task may take?
+                        </h4>
+                        <div className="inputs">
+                          <div className="min">
+                            <h6>Minutes</h6>
+                            <input
+                              type="number"
+                              min="5"
+                              step="5"
+                              value={numberInput.min}
+                              onChange={(e) =>
+                                setNumberInput(
+                                  taskTiming.current(
+                                    +e.target.value,
+                                    numberInput.hr
+                                  )
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="hr">
+                            <h6>Hours</h6>
+                            <input
+                              type="number"
+                              name="hr"
+                              min="0"
+                              value={numberInput.hr}
+                              onChange={(e) =>
+                                setNumberInput(
+                                  taskTiming.current(
+                                    numberInput.min,
+                                    +e.target.value
+                                  )
+                                )
+                              }
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <Clock show={true} taskDuration={numberInput} />
                     </div>
-                  </div>
-                  <Clock show={true} taskDuration={numberInput} />
-                </div>
+                  </>
+                ) : (
+                  <>
+                    <h3>{showTime.h2}</h3>
+                    <h3 className="active">
+                      {showTime.taskOnProgress.current.task}
+                    </h3>
+                  </>
+                )}
                 <div className="close-control ">
                   <button
                     className="button"
@@ -175,7 +288,14 @@ function App() {
                   >
                     Cancel
                   </button>
-                  <button className="button">Ok</button>
+                  <button
+                    className={`button ${!showTime.task && "bg-danger"}`}
+                    onClick={() => {
+                      okClicked();
+                    }}
+                  >
+                    {showTime.task ? "Ok" : "delete task"}
+                  </button>
                 </div>
               </section>
             </div>
