@@ -55,13 +55,11 @@ function App() {
       taskName: taskObj.taskName,
       taskDur: {
         min: min || taskObj.taskDur.min,
-        hr: hr || taskObj.taskDur.hr,
+        hr: hr || 0,
       },
       progress: taskObj.progress,
     };
   }
-  // task Duration //Sorry you soould concentrate on one
-  // console.log(showTimeObject());
   // ============function
   function resetting() {
     inputTextDom.current.value = "";
@@ -106,6 +104,7 @@ function App() {
   // ============function  (re-useable)
   const tasksFilter = (id) => {
     // This function  is re-usable, will return the rest of objects
+    taskOnProgress.current = taskOnProgress.current.id == id && null;
     return tasks.filter((taskO) => {
       return taskO.id !== id;
     });
@@ -114,9 +113,9 @@ function App() {
   // ============function
   function okClicked() {
     // This function will work when the uesr Press (Ok) or (delete)
-    if (showTime.progress) {
+    if (taskOnProgress.current) {
       // when the user should finish his task first
-      console.log(showTime, "IT'S INSIDE Ok Clicked");
+      console.log(showTime, "There is task On Progress");
       tasks.map((taskObj) => {
         if (taskObj.id == showTime.id) {
           taskObj = showTime;
@@ -124,16 +123,17 @@ function App() {
       });
     } else {
       //will send showTime to taskOnProgress & tasksArray
-
       showTime.progress = true;
       taskOnProgress.current = showTime;
 
       tasks.map((taskObj) => {
         if (taskObj.id === showTime.id) {
+          console.log(taskObj.id, showTime.id);
           taskObj = showTime;
+          console.log(taskObj);
         }
       });
-      setTimeUi({ ...showTime.taskDur, sec: 60 });
+      setTimeUi({ ...showTime.taskDur, sec: 0 });
     }
     setShowTime(null);
   }
@@ -147,69 +147,67 @@ function App() {
   }
 
   // ============function  (re-useable)
-  function openWindow() {
-    return (
-      <div className="timer-background ">
-        <section
-          className={`timer-dom position-relative ${
-            taskOnProgress.current && "justify-content-around h-75"
-          }`}
-        >
-          {!taskOnProgress.current ? (
-            <>
-              <h3>{showTime.msg}</h3>
-              <div className="clock-set d-flex gap-2 flex-column align-items-center justify-content-around ">
-                <Clock show={true} />
-                <div className="w-100">
-                  <h3 className="active text-center m-0">
-                    {showTime.taskName}
-                  </h3>
+  function openWindow(showTime) {
+    if (!taskOnProgress.current) {
+      // in case no task on progress //this is first phase
+      return setPhase();
+    } else {
+      // in case there is a task on progress but user press again
+      return showTime.id === taskOnProgress.current.id
+        ? resetPhase()
+        : sorryPhase();
+    }
 
-                  <h4 className="text-center">Deadline?</h4>
-                  <div className="inputs">
-                    <div className="min">
-                      <h6 className="text-center">Minutes</h6>
-                      <input
-                        type="number"
-                        min="5"
-                        step="5"
-                        value={showTime.taskDur.min}
-                        onChange={(e) =>
-                          setShowTime(
-                            showTimeObject(
-                              showTime,
-                              +e.target.value,
-                              showTime.taskDur.hr
-                            )
-                          )
-                        }
-                      />
-                    </div>
-                    <div className="hr">
-                      <h6 className="text-center">Hours</h6>
-                      <input
-                        type="number"
-                        name="hr"
-                        min="0"
-                        value={showTime.taskDur.hr}
-                        onChange={(e) => {
-                          setShowTime(
-                            showTimeObject(
-                              showTime,
-                              showTime.taskDur.min,
-                              +e.target.value
-                            )
-                          );
-                        }}
-                      />
-                    </div>
-                  </div>
+    // functoinss
+    function setPhase() {
+      return (
+        <section className="window position-relative">
+          <h3>Task Duration</h3>
+          <div className="clock-set d-flex gap-2 flex-column align-items-center justify-content-around ">
+            <Clock show={true} />
+            <div className="w-100">
+              <h3 className="active text-center m-0">{showTime.taskName}</h3>
+              <h4 className="text-center">Deadline?</h4>
+              <div className="inputs">
+                <div className="min">
+                  <h6 className="text-center">Minutes</h6>
+                  <input
+                    type="number"
+                    min="5"
+                    step="5"
+                    value={showTime.taskDur.min}
+                    onChange={(e) =>
+                      setShowTime(
+                        showTimeObject(
+                          showTime,
+                          +e.target.value,
+                          showTime.taskDur.hr
+                        )
+                      )
+                    }
+                  />
+                </div>
+                <div className="hr">
+                  <h6 className="text-center">Hours</h6>
+                  <input
+                    type="number"
+                    name="hr"
+                    min="0"
+                    value={showTime.taskDur.hr}
+                    onChange={(e) => {
+                      setShowTime(
+                        showTimeObject(
+                          showTime,
+                          showTime.taskDur.min,
+                          +e.target.value
+                        )
+                      );
+                    }}
+                  />
                 </div>
               </div>
-            </>
-          ) : (
-            "no"
-          )}
+            </div>
+          </div>
           <div className="close-control ">
             <button
               className="button"
@@ -228,40 +226,63 @@ function App() {
               {taskOnProgress.current ? "delete task" : "Ok"}
             </button>
           </div>
+          ;
         </section>
-      </div>
-    );
+      );
+    }
+    function resetPhase() {
+      return (
+        <section className="window position-relative h-50">
+          <h3 className="m-0">Reseting current Task?</h3>
+          <h2 className="active text-center m-0">
+            {taskOnProgress.current.taskName}
+          </h2>
+          <div className="close-control ">
+            <button
+              className="button"
+              onClick={() => {
+                setShowTime(null);
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              className="button reset"
+              onClick={() => {
+                setShowTime(showTimeObject(taskOnProgress.current));
+                console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                taskOnProgress.current = null;
+                setPhase();
+              }}
+            >
+              Reset
+            </button>
+          </div>
+        </section>
+      );
+    }
+    function sorryPhase() {
+      return (
+        <section className="window position-relative h-50">
+          <h3>Sorry, You should concentrate on one task</h3>
+          <h2 className="active text-center">
+            {taskOnProgress.current.taskName}
+          </h2>
+          <div className="close-control ">
+            <button
+              className="button"
+              onClick={() => {
+                setShowTime(null);
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </section>
+      );
+    }
   }
 
-  /*
-                ) : (
-                  <>
-                    <h3>{showTime.h2}</h3>
-                    <h3 className="active">{showTime.task}</h3>
-                  </>
-                )}
-                <div className="close-control ">
-                  <button
-                    className="button"
-                    onClick={() => {
-                      setShowTime(null);
-                    }}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className={`button ${!showTime.task && "bg-danger"}`}
-                    onClick={() => {
-                      okClicked();
-                    }}
-                  >
-                    {showTime.task ? "Ok" : "delete task"}
-                  </button>
-                </div>
-              </section>
-            </div>
-          )}
-  */
   return (
     <div className="to-do">
       <Container>
@@ -345,7 +366,9 @@ function App() {
               </h2>
             )}
           </ul>
-          {showTime && openWindow()}
+          {showTime && (
+            <div className="window-background">{openWindow(showTime)}</div>
+          )}
         </div>
       </Container>
     </div>

@@ -7,7 +7,7 @@
 - input design
 - ul design
 - li design
-- timer-dom design
+- window design
 - animation
 - media
 
@@ -195,8 +195,8 @@ body{
 }
 
 
-/* ========== timer-dom design ========== */
-.to-do .timer-background{
+/* ========== window design ========== */
+.to-do .window-background{
   width: 100%;
   height: 100%;
   background-color: #ffffff29;
@@ -211,7 +211,7 @@ body{
   z-index: 2;
 }
 
-.to-do .timer-dom{
+.to-do .window{
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -222,24 +222,24 @@ body{
   animation: opening var(--transition) forwards;
   overflow: auto;
 }
-.to-do .timer-dom h3{
+.to-do .window :where(h3, h2){
   width: 290px;
   text-align: center;
   line-height: 2.6rem;
 }
 
-.to-do .timer-dom .clock-set h4{
+.to-do .window .clock-set h4{
   color: var(--color1);
 }
 
-.to-do .timer-dom .inputs{
+.to-do .window .inputs{
   display: flex;
   gap: 1rem;
   justify-content: center;
 }
 
 
-.to-do .timer-dom .inputs :where(input, select) {
+.to-do .window .inputs :where(input, select) {
   width: 120px;
   padding: 1rem 0rem;
   border-radius: 6px;
@@ -250,15 +250,15 @@ body{
   color: var(--color1);
   font-weight: 500;
 }
-.to-do .timer-dom .inputs :where(input, select):focus{
+.to-do .window .inputs :where(input, select):focus{
   outline: none;
 }
 
-.to-do .timer-dom .close-control{
+.to-do .window .close-control{
   display: flex;
   gap: 1rem;
 }
-.to-do .timer-dom .close-control :where( button#cancel, button#ok){
+.to-do .window .close-control :where( button#cancel, button#ok){
   background-color: var(--color2);
   border: none;
   border-radius: 6px;
