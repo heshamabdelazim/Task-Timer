@@ -7,33 +7,65 @@ import Clock from "./components/analog-clock/clock";
 
 function App() {
   // ========useRef
-  let inputText = useRef(),
-    inputTextDom = useRef(),
-    submitDom = useRef(),
-    taskId = useRef(0),
-    taskOnProgress = useRef(null),
-    taskTiming = useRef((min = 5, hr = 0) => {
-      return { min, hr };
-    });
+  let inputText = useRef(), //to add task value
+    inputTextDom = useRef(), //to Ui with add button
+    submitDom = useRef(), //this is add button
+    taskId = useRef(0), //every task added it will increment
+    isProgress = useRef(false),
+    taskOnProgress = useRef(null); //when the user press Ok it will be that task
+
+  // ========= useState
+  let [tasks, setTasks] = useState([]),
+    [showTime, setShowTime] = useState(null),
+    [timeUi, setTimeUi] = useState(null);
 
   // ===========useEffect
   useEffect(() => {
     resetting();
     inputTextDom.current.addEventListener("input", buttonValidation);
-    getOnProgTask();
-    // countDown();
+    // getOnProgTask();
+    overview();
   });
 
-  // ========= useState
-  let [tasks, setTasks] = useState([]),
-    [showTime, setShowTime] = useState(null),
-    [numberInput, setNumberInput] = useState(taskTiming.current());
+  // useEffect(() => {
+  //   //why this useEffect? to not infinite loop
+  // }, [showTime]);
 
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     secCountDown();
+  //   }, 1000); // Update count every 1 second
+  //   // Cleanup function to clear the interval when the component unmounts
+  //   return () => clearInterval(intervalId);
+  // }, []);
+
+  // ============function
+  function secCountDown() {
+    if (taskOnProgress.current) {
+      // setTimeUi({timeUi.hr})
+      console.log(timeUi);
+    }
+  }
+
+  // ============function
+  function showTimeObject(taskObj, min, hr) {
+    //will return dynamic object to setShowTime() based on arguments
+    return {
+      id: taskObj.id,
+      taskName: taskObj.taskName,
+      taskDur: {
+        min: min || taskObj.taskDur.min,
+        hr: hr || taskObj.taskDur.hr,
+      },
+      progress: taskObj.progress,
+    };
+  }
+  // task Duration //Sorry you soould concentrate on one
+  // console.log(showTimeObject());
   // ============function
   function resetting() {
     inputTextDom.current.value = "";
     !showTime && inputTextDom.current.focus();
-    // inputTextDom.current.focus();
     inputText.current = "";
     submitDom.current.classList.add("forbidden");
   }
@@ -44,7 +76,6 @@ function App() {
       ? submitDom.current.classList.add("forbidden")
       : submitDom.current.classList.remove("forbidden");
   };
-
   // ============function
   function addingTask(e) {
     e.preventDefault();
@@ -52,17 +83,24 @@ function App() {
       setTasks([
         ...tasks,
         {
-          task: inputText.current,
-          taskDur: null,
+          taskName: inputText.current,
+          taskDur: { min: 5, hr: 0 },
           id: ++taskId.current,
+          progress: false,
         },
       ]);
   }
   // ============function  (re-useable)
   function getOnProgTask() {
-    // Every render this function will get the task that user chose
-    let onProgressTask = tasks.find((taskObj) => taskObj.taskDur);
-    taskOnProgress.current = onProgressTask ? onProgressTask : null;
+    // In every render if there is task on progress this function will get that task
+
+    if (taskOnProgress.current) {
+      setTimeUi({ ...taskOnProgress.current.taskDur, sec: 0 });
+    } else {
+      // to reset if the task finish
+      taskOnProgress.current = null;
+      setTimeUi(null);
+    }
   }
 
   // ============function  (re-useable)
@@ -74,64 +112,156 @@ function App() {
   };
 
   // ============function
-  function clockItemClicked(taskObj) {
-    // This function when the user press (time item).
-    //Task coundown or not. It will function
-
-    if (taskOnProgress.current) {
-      taskOnProgress.current.id === taskObj.id
-        ? setShowTime(taskObj)
-        : setShowTime({
-            h2: "Sorry, Concentrate on one task",
-            taskOnProgress,
-          });
-    } else {
-      console.log(taskTiming.current());
-      numberInput.min = taskObj.taskDur
-        ? taskObj.taskDur.min
-        : taskTiming.current().min;
-      numberInput.hr = taskObj.taskDur
-        ? taskObj.taskDur.hr
-        : taskTiming.current().hr;
-      setShowTime(taskObj);
-    }
-  }
-
-  // ============function
   function okClicked() {
-    // This function will work when the uesr Press Ok or delete
-    if (showTime.task) {
-      showTime.taskDur = numberInput;
-      console.log(showTime);
+    // This function will work when the uesr Press (Ok) or (delete)
+    if (showTime.progress) {
+      // when the user should finish his task first
+      console.log(showTime, "IT'S INSIDE Ok Clicked");
       tasks.map((taskObj) => {
         if (taskObj.id == showTime.id) {
           taskObj = showTime;
         }
       });
     } else {
-      const onProgressObj = tasks.find((tasksObj) => tasksObj.taskDur);
-      const restTasks = tasksFilter(onProgressObj.id);
-      setTasks(restTasks);
+      //will send showTime to taskOnProgress & tasksArray
+
+      showTime.progress = true;
+      taskOnProgress.current = showTime;
+
+      tasks.map((taskObj) => {
+        if (taskObj.id === showTime.id) {
+          taskObj = showTime;
+        }
+      });
+      setTimeUi({ ...showTime.taskDur, sec: 60 });
     }
     setShowTime(null);
-  }
-
-  // ============function
-  function countDown() {
-    let isTaskFunction = tasks.find((taskObj) => taskObj.taskDur);
-    isTaskFunction && console.log(isTaskFunction, "this is isTaskFunction");
-    let beso = 5;
-    return beso--;
   }
 
   // ============function
   function overview() {
     console.table(tasks);
     console.log(showTime, "showTime");
-    console.log(numberInput, "numberInput");
+    console.log(taskOnProgress.current, "taskOnProgress");
+    console.log(timeUi, "timeUi");
   }
-  overview();
 
+  // ============function  (re-useable)
+  function openWindow() {
+    return (
+      <div className="timer-background ">
+        <section
+          className={`timer-dom position-relative ${
+            taskOnProgress.current && "justify-content-around h-75"
+          }`}
+        >
+          {!taskOnProgress.current ? (
+            <>
+              <h3>{showTime.msg}</h3>
+              <div className="clock-set d-flex gap-2 flex-column align-items-center justify-content-around ">
+                <Clock show={true} />
+                <div className="w-100">
+                  <h3 className="active text-center m-0">
+                    {showTime.taskName}
+                  </h3>
+
+                  <h4 className="text-center">Deadline?</h4>
+                  <div className="inputs">
+                    <div className="min">
+                      <h6 className="text-center">Minutes</h6>
+                      <input
+                        type="number"
+                        min="5"
+                        step="5"
+                        value={showTime.taskDur.min}
+                        onChange={(e) =>
+                          setShowTime(
+                            showTimeObject(
+                              showTime,
+                              +e.target.value,
+                              showTime.taskDur.hr
+                            )
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="hr">
+                      <h6 className="text-center">Hours</h6>
+                      <input
+                        type="number"
+                        name="hr"
+                        min="0"
+                        value={showTime.taskDur.hr}
+                        onChange={(e) => {
+                          setShowTime(
+                            showTimeObject(
+                              showTime,
+                              showTime.taskDur.min,
+                              +e.target.value
+                            )
+                          );
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            "no"
+          )}
+          <div className="close-control ">
+            <button
+              className="button"
+              onClick={() => {
+                setShowTime(null);
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              className={`button ${taskOnProgress.current && "bg-danger"}`}
+              onClick={() => {
+                okClicked();
+              }}
+            >
+              {taskOnProgress.current ? "delete task" : "Ok"}
+            </button>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  /*
+                ) : (
+                  <>
+                    <h3>{showTime.h2}</h3>
+                    <h3 className="active">{showTime.task}</h3>
+                  </>
+                )}
+                <div className="close-control ">
+                  <button
+                    className="button"
+                    onClick={() => {
+                      setShowTime(null);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className={`button ${!showTime.task && "bg-danger"}`}
+                    onClick={() => {
+                      okClicked();
+                    }}
+                  >
+                    {showTime.task ? "Ok" : "delete task"}
+                  </button>
+                </div>
+              </section>
+            </div>
+          )}
+  */
   return (
     <div className="to-do">
       <Container>
@@ -181,15 +311,14 @@ function App() {
                     }
                   >
                     <div className="d-flex justify-content-center align-items-center gap-3">
-                      <span className={`${taskObj.taskDur ? "active" : ""}`}>
-                        {ind + 1}- {taskObj.task}
+                      <span className={`${taskObj.progress ? "active" : ""}`}>
+                        {ind + 1}- {taskObj.taskName}
                       </span>
-                      {taskObj.taskDur && (
+                      {taskObj.progress && (
                         <>
                           {" - "}
                           <span className="tm rounded p-2">
-                            Time Left: {taskObj.taskDur.hr} :{" "}
-                            {taskObj.taskDur.min}
+                            {/* Time Left: {timeUi} */}
                           </span>
                         </>
                       )}
@@ -199,7 +328,7 @@ function App() {
                         className="icon-stopwatch"
                         title="Set Time"
                         onClick={() => {
-                          clockItemClicked(taskObj);
+                          setShowTime(showTimeObject(taskObj));
                         }}
                       />
                       <span
@@ -216,90 +345,7 @@ function App() {
               </h2>
             )}
           </ul>
-          {showTime && (
-            <div className="timer-background ">
-              <section
-                className={`timer-dom position-relative ${
-                  !showTime.task && "justify-content-around h-75"
-                }`}
-              >
-                {showTime.task ? (
-                  <>
-                    <h3 className="active">{showTime.task}</h3>
-                    <div className="clock-set d-flex align-items-center justify-content-around ">
-                      <div className="w-100">
-                        <h4 className="text-center">
-                          How long the Task may take?
-                        </h4>
-                        <div className="inputs">
-                          <div className="min">
-                            <h6>Minutes</h6>
-                            <input
-                              type="number"
-                              min="5"
-                              step="5"
-                              value={numberInput.min}
-                              onChange={(e) =>
-                                setNumberInput(
-                                  taskTiming.current(
-                                    +e.target.value,
-                                    numberInput.hr
-                                  )
-                                )
-                              }
-                            />
-                          </div>
-                          <div className="hr">
-                            <h6>Hours</h6>
-                            <input
-                              type="number"
-                              name="hr"
-                              min="0"
-                              value={numberInput.hr}
-                              onChange={(e) =>
-                                setNumberInput(
-                                  taskTiming.current(
-                                    numberInput.min,
-                                    +e.target.value
-                                  )
-                                )
-                              }
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <Clock show={true} taskDuration={numberInput} />
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <h3>{showTime.h2}</h3>
-                    <h3 className="active">
-                      {showTime.taskOnProgress.current.task}
-                    </h3>
-                  </>
-                )}
-                <div className="close-control ">
-                  <button
-                    className="button"
-                    onClick={() => {
-                      setShowTime(null);
-                    }}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className={`button ${!showTime.task && "bg-danger"}`}
-                    onClick={() => {
-                      okClicked();
-                    }}
-                  >
-                    {showTime.task ? "Ok" : "delete task"}
-                  </button>
-                </div>
-              </section>
-            </div>
-          )}
+          {showTime && openWindow()}
         </div>
       </Container>
     </div>

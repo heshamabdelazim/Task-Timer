@@ -1,14 +1,53 @@
-this task-timer will do the following:
 
-- when the user enter his task ? 
-	there will be controls like (check icon). This to delete the task
-	another control is (set time icon) This to put time estimated. For example (making Coffe. It may take 20 min)
+# USER UX
+
+ - User enter many tasks
+ - Every task has its items (time item + check item)
+ - User press (check item), then the task will be deleted
+ - User press (time item) of a task then a window will open 
+ - User set time of that chosen task 
+ - User press (Ok or cancel buttons)
+ - Clock will stroke and rotate based on countdown of chosen task
+ - User may press (time item) again for another task or the chosen same task
+ - User will finish his task and delete it.
+
+
 
 =================================================	
 
 #logic 
 
- - Every task will be object. This object will contain {taskName: "" , timerStart: number}
+ - Tasks array has objects of every task
+
+ - Every object will contain {taskName: "" , timerStart: number, ++id}
+
+ - User press (add button)? Push to the (tasks) array
+
+ - User press (check item)? Loop inside (tasks) and get the task based on task (ID) then filter 
+
+ - User press (time item)? setShowTime(taskObject) and a (window conditional render) will open to the user 	(task details) he can set his task duration.
+	inside conditional render, User Press cancel? setShowTime(null)
+	inside conditional render, User chnage inputs? setNumber({taskDur: number , timeSet: min or hour})
+	inside conditional render, User press Ok? send that number to the showTime object
+		then send that showTime object to (tasks) array how send to task array? (loop based on ID)
+		after finish sending that taskObject? setShowTime(null) to close the window
+
+ - Another conditional render will be, beside task name, if there is taskDur
+
+ - User press (time item) again? Go back to the function onClick of that (time icon)
+	Loop inside (tasks) to find any taskDur. 
+	True? ok there is task on progress. You will setShowTime({h2: "Sorry you need to concentrate on 		this task", taskOnProgress}
+	false? setShowTime(taskObject) to set a task as we did before.
+		in case the user has task on progress so the window will has 2 buttons
+			User press (cancel)? setShowTime(null);
+			User press (delete)? loop based on Id and delete
+
+
+
+
+
+
+ 
  - after the user added his task, he will click on (timer icon ) Then, a Dom will be opened to show his task and his time set
  - when the user enter his task and pressed the (timer icon) it will setShowTime(has task Object , ind) then open that Dom. 
  	Inside that timer dom, when the user press cancel => setShowTime(null)
