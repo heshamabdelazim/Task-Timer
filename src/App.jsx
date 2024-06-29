@@ -4,48 +4,62 @@ import { Container } from "react-bootstrap";
 
 import "./icons/style.css";
 import Clock from "./components/analog-clock/clock";
+import CountdownComponent from "./components/test/Test";
 
 function App() {
   // ========useRef
   let inputText = useRef(), //to add task value
     inputTextDom = useRef(), //to Ui with add button
     submitDom = useRef(), //this is add button
-    taskId = useRef(0), //every task added it will increment
-    isProgress = useRef(false),
-    taskOnProgress = useRef(null); //when the user press Ok it will be that task
-
+    taskId = useRef(0); //every task added it will increment
   // ========= useState
   let [tasks, setTasks] = useState([]),
-    [showTime, setShowTime] = useState(null),
-    [timeUi, setTimeUi] = useState(null);
+    [showTime, setShowTime] = useState(),
+    [timeUi, setTimeUi] = useState(),
+    [taskOnProgress, setTaskOnProgress] = useState(null), //when the user press Ok it will be that task
+    [test, setTest] = useState(30);
 
   // ===========useEffect
   useEffect(() => {
     resetting();
     inputTextDom.current.addEventListener("input", buttonValidation);
-    // getOnProgTask();
+    getOnProgTask();
     overview();
-  });
+  }, [taskOnProgress, showTime, tasks]);
 
-  // useEffect(() => {
-  //   //why this useEffect? to not infinite loop
-  // }, [showTime]);
+  useEffect(() => {
+    if (taskOnProgress) {
+      const intervalId = setInterval(() => {
+        setTimeUi((previous) => {
+          let secUpdate = previous.sec - 1;
+          let minUpdate = previous.min;
+          let hrUpdate = previous.hr;
 
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     secCountDown();
-  //   }, 1000); // Update count every 1 second
-  //   // Cleanup function to clear the interval when the component unmounts
-  //   return () => clearInterval(intervalId);
-  // }, []);
+          if (secUpdate === -1) {
+            //sec end and update
+            secUpdate = 59;
+            --minUpdate;
+          }
+          if (minUpdate === -1) {
+            //min end and update
+            minUpdate = 59;
+            hrUpdate--;
+          }
 
-  // ============function
-  function secCountDown() {
-    if (taskOnProgress.current) {
-      // setTimeUi({timeUi.hr})
-      console.log(timeUi);
+          if (secUpdate == 0 && minUpdate == 0 && hrUpdate == 0) {
+            clearInterval(intervalId); //This if timer ended in 0
+          }
+          return {
+            sec: secUpdate,
+            min: minUpdate,
+            hr: hrUpdate,
+          };
+        });
+      }, 1000); // Update count every 1 second
+      // Cleanup function to clear the interval when the component unmounts
+      return () => clearInterval(intervalId);
     }
-  }
+  }, [taskOnProgress]);
 
   // ============function
   function showTimeObject(taskObj, min, hr) {
@@ -91,20 +105,16 @@ function App() {
   // ============function  (re-useable)
   function getOnProgTask() {
     // In every render if there is task on progress this function will get that task
-
-    if (taskOnProgress.current) {
-      setTimeUi({ ...taskOnProgress.current.taskDur, sec: 0 });
-    } else {
-      // to reset if the task finish
-      taskOnProgress.current = null;
-      setTimeUi(null);
-    }
+    const taskWork = tasks.find((taskObj) => taskObj.progress);
+    setTaskOnProgress(taskWork);
   }
 
   // ============function  (re-useable)
   const tasksFilter = (id) => {
     // This function  is re-usable, will return the rest of objects
-    taskOnProgress.current = taskOnProgress.current.id == id && null;
+    if (taskOnProgress) {
+      taskOnProgress = taskOnProgress.id == id && null;
+    }
     return tasks.filter((taskO) => {
       return taskO.id !== id;
     });
@@ -113,49 +123,41 @@ function App() {
   // ============function
   function okClicked() {
     // This function will work when the uesr Press (Ok) or (delete)
-    if (taskOnProgress.current) {
-      // when the user should finish his task first
-      console.log(showTime, "There is task On Progress");
-      tasks.map((taskObj) => {
-        if (taskObj.id == showTime.id) {
-          taskObj = showTime;
-        }
-      });
-    } else {
-      //will send showTime to taskOnProgress & tasksArray
-      showTime.progress = true;
-      taskOnProgress.current = showTime;
-
-      tasks.map((taskObj) => {
-        if (taskObj.id === showTime.id) {
-          console.log(taskObj.id, showTime.id);
-          taskObj = showTime;
-          console.log(taskObj);
-        }
-      });
-      setTimeUi({ ...showTime.taskDur, sec: 0 });
-    }
+    showTime.progress = true;
+    taskOnProgress = showTime;
+    const taskUpdate = tasks.map((taskObj) => {
+      return showTime.id == taskObj.id ? showTime : taskObj;
+    });
+    setTasks(taskUpdate);
+    setTimeUi({ ...showTime.taskDur, sec: 0 });
     setShowTime(null);
   }
-
+  timeUi && console.log(timeUi.min.length);
   // ============function
   function overview() {
     console.table(tasks);
     console.log(showTime, "showTime");
-    console.log(taskOnProgress.current, "taskOnProgress");
+    console.log(taskOnProgress, "taskOnProgress");
     console.log(timeUi, "timeUi");
   }
 
   // ============function  (re-useable)
+  function numberModify(number) {
+    //This function when the timer work to give number has 2 digits
+    return number.toString().length == 1 ? `0${number}` : number;
+  }
+
+  // ============function  (re-useable)
   function openWindow(showTime) {
-    if (!taskOnProgress.current) {
+    if (!taskOnProgress) {
       // in case no task on progress //this is first phase
+      console.log("There is no taskOnProgress");
       return setPhase();
     } else {
+      console.log("There is taskOnProgress");
+
       // in case there is a task on progress but user press again
-      return showTime.id === taskOnProgress.current.id
-        ? resetPhase()
-        : sorryPhase();
+      return showTime.id === taskOnProgress.id ? resetPhase() : sorryPhase();
     }
 
     // functoinss
@@ -166,7 +168,7 @@ function App() {
           <div className="clock-set d-flex gap-2 flex-column align-items-center justify-content-around ">
             <Clock show={true} />
             <div className="w-100">
-              <h3 className="active text-center m-0">{showTime.taskName}</h3>
+              <h2 className="active text-center m-0">{showTime.taskName}</h2>
               <h4 className="text-center">Deadline?</h4>
               <div className="inputs">
                 <div className="min">
@@ -218,15 +220,14 @@ function App() {
               Cancel
             </button>
             <button
-              className={`button ${taskOnProgress.current && "bg-danger"}`}
+              className={`button ${taskOnProgress && "bg-danger"}`}
               onClick={() => {
                 okClicked();
               }}
             >
-              {taskOnProgress.current ? "delete task" : "Ok"}
+              Ok
             </button>
           </div>
-          ;
         </section>
       );
     }
@@ -234,9 +235,7 @@ function App() {
       return (
         <section className="window position-relative h-50">
           <h3 className="m-0">Reseting current Task?</h3>
-          <h2 className="active text-center m-0">
-            {taskOnProgress.current.taskName}
-          </h2>
+          <h2 className="active text-center m-0">{taskOnProgress.taskName}</h2>
           <div className="close-control ">
             <button
               className="button"
@@ -249,10 +248,10 @@ function App() {
             <button
               className="button reset"
               onClick={() => {
-                setShowTime(showTimeObject(taskOnProgress.current));
-                console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                taskOnProgress.current = null;
-                setPhase();
+                tasks.map((taskObj) => {
+                  taskObj.progress = false;
+                });
+                setShowTime(showTimeObject(showTime));
               }}
             >
               Reset
@@ -265,9 +264,7 @@ function App() {
       return (
         <section className="window position-relative h-50">
           <h3>Sorry, You should concentrate on one task</h3>
-          <h2 className="active text-center">
-            {taskOnProgress.current.taskName}
-          </h2>
+          <h2 className="active text-center">{taskOnProgress.taskName}</h2>
           <div className="close-control ">
             <button
               className="button"
@@ -339,7 +336,9 @@ function App() {
                         <>
                           {" - "}
                           <span className="tm rounded p-2">
-                            {/* Time Left: {timeUi} */}
+                            {numberModify(timeUi.hr)} :{" "}
+                            {numberModify(timeUi.min)} :{" "}
+                            {numberModify(timeUi.sec)}
                           </span>
                         </>
                       )}

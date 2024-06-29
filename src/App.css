@@ -194,6 +194,21 @@ body{
   background-color: #ff8484;;
 }
 
+.to-do .parent ul li .tm{
+  position: relative;
+  font-weight: 500;
+}
+.to-do .parent ul li .tm::before{
+  position: absolute;
+  content: "Timer";
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -80%);
+  background-color: var(--color4);
+  color: var(--color1);
+  padding: 0.05rem 0.5rem;
+  border-radius: 6px;
+}
 
 /* ========== window design ========== */
 .to-do .window-background{
@@ -225,12 +240,12 @@ body{
 .to-do .window :where(h3, h2){
   width: 290px;
   text-align: center;
-  line-height: 2.6rem;
+  /* line-height: 2.6rem; */
 }
-
-.to-do .window .clock-set h4{
+.to-do .window :where(h4, h3){
   color: var(--color1);
 }
+
 
 .to-do .window .inputs{
   display: flex;
