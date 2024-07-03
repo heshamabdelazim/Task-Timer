@@ -61,7 +61,7 @@ const Clock = ({ show, time }) => {
     time &&
     dashes.current().map((dash, ind) => {
       const dashesStart = min * dashesEveryMin.current; //every minute has 2 dashes so suppose current minute is 30 so number of dashes is 30*2
-      const minutesLength = min + time.min + 1; //example: current min is 30 and user choosed 5 min so the length will be 36
+      const minutesLength = time.hr * 60 + min + time.min; //example: current min is 30 and user choosed 5 min so the length will be 36
       const dashesEnd = minutesLength * dashesEveryMin.current; //every minute has 2 dashes so 36 minute has 72 dashes
 
       if (dash >= dashesStart && dash <= dashesEnd) {
