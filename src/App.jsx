@@ -294,9 +294,7 @@ function App() {
               <div className="slogan mb-4">
                 <h1 className="m-0">Task Timer</h1>
                 <span className="m-0">Wasting your life? </span>
-                <span className="text-warning mb-0   ms-3">
-                  watch your time.
-                </span>
+                <span className="text-warning mb-0 ">watch your time.</span>
               </div>
               <form>
                 <input
