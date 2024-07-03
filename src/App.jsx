@@ -4,7 +4,6 @@ import { Container } from "react-bootstrap";
 
 import "./icons/style.css";
 import Clock from "./components/analog-clock/clock";
-import CountdownComponent from "./components/test/Test";
 
 function App() {
   // ========useRef
@@ -18,17 +17,16 @@ function App() {
     [timeUi, setTimeUi] = useState(),
     [taskOnProgress, setTaskOnProgress] = useState(null), //when the user press Ok it will be that task
     [test, setTest] = useState(30);
-
   // ===========useEffect
   useEffect(() => {
     resetting();
     inputTextDom.current.addEventListener("input", buttonValidation);
-    getOnProgTask();
+    getOnProgTask(); //this, AFter the user set time to get task on progress will get timeUi
     overview();
   }, [taskOnProgress, showTime, tasks]);
 
   useEffect(() => {
-    if (taskOnProgress) {
+    if (timeUi) {
       const intervalId = setInterval(() => {
         setTimeUi((previous) => {
           let secUpdate = previous.sec - 1;
@@ -47,7 +45,7 @@ function App() {
           }
 
           if (secUpdate == 0 && minUpdate == 0 && hrUpdate == 0) {
-            clearInterval(intervalId); //This if timer ended in 0
+            clearInterval(intervalId); //This if timer ended in 00:00:00
           }
           return {
             sec: secUpdate,
@@ -76,6 +74,7 @@ function App() {
   }
   // ============function
   function resetting() {
+    //default after adding tasks
     inputTextDom.current.value = "";
     !showTime && inputTextDom.current.focus();
     inputText.current = "";
@@ -84,6 +83,7 @@ function App() {
 
   // ============function
   const buttonValidation = () => {
+    //when the user start writting
     !inputTextDom.current.value
       ? submitDom.current.classList.add("forbidden")
       : submitDom.current.classList.remove("forbidden");
@@ -96,7 +96,7 @@ function App() {
         ...tasks,
         {
           taskName: inputText.current,
-          taskDur: { min: 5, hr: 0 },
+          taskDur: { min: 0, hr: 0 },
           id: ++taskId.current,
           progress: false,
         },
@@ -104,9 +104,11 @@ function App() {
   }
   // ============function  (re-useable)
   function getOnProgTask() {
-    // In every render if there is task on progress this function will get that task
-    const taskWork = tasks.find((taskObj) => taskObj.progress);
+    // In every render, IF there is task on progress
+    const taskWork = tasks.find((taskObj) => taskObj.progress); //this will be onProgress
     setTaskOnProgress(taskWork);
+    taskWork && setTimeUi({ ...taskWork.taskDur, sec: 0 }); //if there is task on progress timeUi will have time
+    !taskWork && setTimeUi(null);
   }
 
   // ============function  (re-useable)
@@ -123,16 +125,19 @@ function App() {
   // ============function
   function okClicked() {
     // This function will work when the uesr Press (Ok) or (delete)
-    showTime.progress = true;
-    taskOnProgress = showTime;
-    const taskUpdate = tasks.map((taskObj) => {
-      return showTime.id == taskObj.id ? showTime : taskObj;
-    });
-    setTasks(taskUpdate);
-    setTimeUi({ ...showTime.taskDur, sec: 0 });
-    setShowTime(null);
+    console.log(showTime);
+    if (showTime.taskDur.min != 0 || showTime.taskDur.hr != 0) {
+      showTime.progress = true;
+      taskOnProgress = showTime;
+      const taskUpdate = tasks.map((taskObj) => {
+        return showTime.id == taskObj.id ? showTime : taskObj;
+      });
+      setTasks(taskUpdate);
+      // setTimeUi({ ...showTime.taskDur, sec: 0 });
+      setShowTime(null);
+    }
   }
-  timeUi && console.log(timeUi.min.length);
+
   // ============function
   function overview() {
     console.table(tasks);
@@ -166,7 +171,7 @@ function App() {
         <section className="window position-relative">
           <h3>Task Duration</h3>
           <div className="clock-set d-flex gap-2 flex-column align-items-center justify-content-around ">
-            <Clock show={true} />
+            <Clock show={true} time={showTime.taskDur} />
             <div className="w-100">
               <h2 className="active text-center m-0">{showTime.taskName}</h2>
               <h4 className="text-center">Deadline?</h4>
@@ -175,7 +180,7 @@ function App() {
                   <h6 className="text-center">Minutes</h6>
                   <input
                     type="number"
-                    min="5"
+                    min="0"
                     step="5"
                     value={showTime.taskDur.min}
                     onChange={(e) =>
@@ -220,7 +225,7 @@ function App() {
               Cancel
             </button>
             <button
-              className={`button ${taskOnProgress && "bg-danger"}`}
+              className={`button  bg-danger}`}
               onClick={() => {
                 okClicked();
               }}
@@ -297,7 +302,7 @@ function App() {
                 <input
                   type="text"
                   maxLength="40"
-                  placeholder="adding task?"
+                  placeholder="Not layz? Add Task."
                   onChange={(e) => {
                     inputText.current = e.target.value;
                   }}
@@ -315,7 +320,7 @@ function App() {
               </form>
             </section>
             <section className="rig">
-              <Clock />
+              <Clock time={timeUi} />
             </section>
           </div>
           <ul className="list">
@@ -332,7 +337,7 @@ function App() {
                       <span className={`${taskObj.progress ? "active" : ""}`}>
                         {ind + 1}- {taskObj.taskName}
                       </span>
-                      {taskObj.progress && (
+                      {taskOnProgress && taskOnProgress.id == taskObj.id && (
                         <>
                           {" - "}
                           <span className="tm rounded p-2">
@@ -360,9 +365,10 @@ function App() {
                 );
               })
             ) : (
-              <h2 style={{ color: "var(--color5)" }}>
-                Why are you lazy poor useless? 🐌
-              </h2>
+              <>
+                <h2 className="lazy">Why are you lazy poor useless? 🐌</h2>
+                {/* <h2 className="huh">Huh? 🐌</h2> */}
+              </>
             )}
           </ul>
           {showTime && (

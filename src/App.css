@@ -137,6 +137,7 @@ body{
 /* ========== ul design ========== */
 .to-do .parent ul{
   list-style: none;   
+  box-shadow: inset 0px 3px 10px 5px #201f1f52;
   padding: 2rem;
   background-color: var(--color3);
   border: 1rem solid var(--color2);
@@ -146,17 +147,20 @@ body{
   overflow: auto;
   position: relative;
 }
-.to-do .parent ul h2{
-  /* opacity: 0; */
-  transform: translateY(-70px);
-  animation: to-bot var(--transition) forwards 2s ;
+.to-do .parent ul h2.lazy{
+  color: var(--color5);
+  animation: to-bot  2s forwards;
+  position: absolute;
+  top: 20px;
 }
+
 
 
 /* ========== li design ========== */
 
 .to-do  .list li{
   font-size: 2rem;
+  text-align: center;
   color: var(--color1);
   padding: 0.8rem 0;
   animation: opening var(--transition) forwards;
@@ -179,11 +183,6 @@ body{
   scale: 1.1;
 }
 
-.to-do .parent ul li span.tm{
-  font-size: 1rem;
-  color: orange;
-  background-color: var(--color2);
-}
 .to-do .parent ul li .controls span.icon-stopwatch:hover{
   background-color: var(--color2);
 }
@@ -196,7 +195,11 @@ body{
 
 .to-do .parent ul li .tm{
   position: relative;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: 0.1rem;
+  color: var(--color3);
+  background-color: var(--color1);
 }
 .to-do .parent ul li .tm::before{
   position: absolute;
@@ -223,7 +226,7 @@ body{
   align-items: center;
   backdrop-filter: blur(5px);
   animation: opening 0.4s forwards;
-  z-index: 2;
+  z-index: 99;
 }
 
 .to-do .window{
@@ -300,13 +303,22 @@ body{
       scale: 1;
     }
   }
-@keyframes bg {
-  0%{background-position: 0 0;}
-  100%{background-position: 250% 250%;}
-}
-@keyframes to-bot {
-  /* from{transform: translateY(-20px);} */
-  to{transform: translateY(0);}
-}
+  @keyframes bg {
+    0%{background-position: 0 0;}
+    100%{background-position: 250% 250%;}
+  }
+  @keyframes to-bot {
+    0%,50%{transform: translateY(-190%);}
+    100%{transform: translateY(0);}
+  }
 
+/* ========== animation ========== */
+@media (max-width: 991px){
+  .to-do .parent ul{
+    border-width: 0.5rem;
+    padding: 0.9rem;
+  }
+}
+  
 
+/*TEST=======================*/

@@ -12,22 +12,47 @@
     height: 200px;
     border-radius: 50%;
     background-color: var(--color3);
-    border: 3px solid white;
+    /* border: 3px solid white; */
     overflow: hidden;
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0px 0px 10px 3px var(--color3);
+    box-shadow: 0px 0px 25px 0px #0000008f, inset 5px 5px 10px 0px #ffffff7a, inset -5px -9px 13px 3px #4040406b;
+    
 }
 
 .to-do .parent .clock > span{
     position: absolute;
     font-weight: 500;
-    color: orange;
-    inset: 6px;
+    padding: 0.5rem;
+    color: white;
+    inset: 0px;
     font-size: 20px;
     text-align: center;
+    z-index: 9;
+}
+.to-do .parent .clock > span::before{
+    content: "";
+    position: absolute;
+    top: 0px;
+    height: 10px;
+    width: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+}
+
+.to-do .parent .clock  span.dash{
+    position: absolute;
+    text-align: center;
+    inset: 10px;
+    z-index: 1;
+}
+.to-do .parent .clock  span.dash b{
+    width: 14px;
+    height: 2px;
+    background-color: #00ff0066;
 }
 
 /* ========== indicators ============ */
@@ -67,15 +92,14 @@
 .to-do .parent .clock .indicator span.min{
     width: 4px;
     height: 70px;
-    background-color: var(--color1);
+    /* background-color: var(--color1); */
+    background-color: lime;
 }
 .to-do .parent .clock .indicator span.hr{
     width: 5px;
     height: 40px;
     background-color: white;
 }
-
-
 
 
 .to-do .parent .clock h5{
@@ -120,4 +144,7 @@
     width: 6px;
     height: 57px;
     background-color: white;
+}
+.to-do .parent .clock.showTimer span.dash b{
+    width: 14px;
 }
