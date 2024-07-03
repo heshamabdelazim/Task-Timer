@@ -299,8 +299,8 @@ function App() {
               <form>
                 <input
                   type="text"
-                  maxLength="40"
-                  placeholder="Not layz? Add Task."
+                  maxLength="20"
+                  placeholder="Not lazy? Add Task."
                   onChange={(e) => {
                     inputText.current = e.target.value;
                   }}
@@ -328,17 +328,21 @@ function App() {
                   <li
                     key={taskObj.id}
                     className={
-                      "d-flex justify-content-between align-items-center"
+                      " d-flex justify-content-between align-items-center gap-2"
                     }
                   >
-                    <div className="d-flex justify-content-center align-items-center gap-3">
-                      <span className={`${taskObj.progress ? "active" : ""}`}>
-                        {ind + 1}- {taskObj.taskName}
+                    <div className="position-relative d-flex align-items-center gap-3">
+                      <span
+                        className={` d-flex gap-2${
+                          taskObj.progress ? "active" : ""
+                        }`}
+                      >
+                        <span>{ind + 1}</span> <span>-</span> {taskObj.taskName}
                       </span>
                       {taskOnProgress && taskOnProgress.id == taskObj.id && (
                         <>
                           {" - "}
-                          <span className="tm rounded p-2">
+                          <span className="tm rounded text-center">
                             {numberModify(timeUi.hr)} :{" "}
                             {numberModify(timeUi.min)} :{" "}
                             {numberModify(timeUi.sec)}
@@ -346,7 +350,7 @@ function App() {
                         </>
                       )}
                     </div>
-                    <div className="controls d-flex align-items-center gap-4">
+                    <div className="controls d-flex align-items-center">
                       <span
                         className="icon-stopwatch"
                         title="Set Time"
@@ -379,7 +383,7 @@ function App() {
           <p className="m-0">Developed By:</p>
           <h3 className="m-0">Hesham Abdelazim Kamel</h3>
         </div>
-        <div className="right d-flex gap-3">
+        <div className="right d-flex flex-wrap justify-content-center gap-3 p-3">
           <a
             href="https://github.com/heshamabdelazim"
             className="icon-github"

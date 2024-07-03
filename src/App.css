@@ -163,13 +163,17 @@ body{
 
 .to-do  .list li{
   font-size: 2rem;
-  text-align: center;
+  /* text-align: center; */
   color: var(--color1);
   padding: 0.8rem 0;
   animation: opening var(--transition) forwards;
 }
 .to-do .parent ul li:not(:last-child){
   border-bottom: 2px solid var(--color5);
+}
+
+.to-do .parent ul li .controls{
+  gap: 1.5rem;
 }
 
 .to-do .parent ul li .controls span{
@@ -198,6 +202,7 @@ body{
 
 .to-do .parent ul li .tm{
   position: relative;
+  padding: 0.2rem;
   font-weight: 600;
   font-size: 1.2rem;
   letter-spacing: 0.1rem;
@@ -292,17 +297,10 @@ body{
 }
 /* ========== window design ========== */
 .to-do .footer{
-  position: fixed;
   width: 100%;
-  background-color:rgba(255, 255, 255, 0.395) ;
   bottom: 10px;
 }
-.to-do .footer h3{
-  /* animation: bg ; */
-  
-  /* text-align: center; */
-  /* color: transparent; */
-}
+
 .to-do .footer .right a{
   color: #4a4a4a;
   font-size: 1.5rem;
@@ -349,12 +347,13 @@ body{
     padding: 0.9rem;
   }
 }
+
 @media (max-width: 767px){
-  .to-do{
+  /* .to-do{
     padding-bottom: 50px;
-  }
+  } */
   .to-do .parent{
-    border-top-right-radius:initial;
+    border-top-right-radius:6px;
   }
   .to-do .parent .info{
   flex-direction: column;
@@ -362,8 +361,26 @@ body{
   .to-do .slogan span + span{
     margin-left: 0;
   }
+  .to-do .list li {
+    font-size: 1.3rem;
+  } 
+  .to-do .list li div:nth-child(1){
+    gap: 0.33rem !important;
+  }
+
+  .to-do .parent ul li .controls{
+    gap: 0.5rem;
+  }
+  .to-do .parent ul li .controls span{
+    font-size: inherit;
+  }
+  .to-do .parent ul li .tm{
+    font-size: 0.8rem;
+    padding: 0.2rem;
+  }
+
 }
- 
+
 @media (max-width: 500px){
   .to-do .footer h3{
     font-size: 1.4rem;
