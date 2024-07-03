@@ -333,7 +333,7 @@ function App() {
                   >
                     <div className="position-relative d-flex align-items-center gap-3">
                       <span
-                        className={` d-flex gap-2${
+                        className={` d-flex gap-1 ${
                           taskObj.progress ? "active" : ""
                         }`}
                       >
