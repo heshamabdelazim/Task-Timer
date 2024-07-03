@@ -8,6 +8,7 @@
 - ul design
 - li design
 - window design
+- footer
 - animation
 - media
 
@@ -289,6 +290,25 @@ body{
   transition: var(--transition);
   color: var(--color1);
 }
+/* ========== window design ========== */
+.to-do .footer{
+  position: fixed;
+  width: 100%;
+  background-color:rgba(255, 255, 255, 0.395) ;
+  bottom: 10px;
+}
+.to-do .footer h3{
+  /* animation: bg ; */
+  
+  /* text-align: center; */
+  /* color: transparent; */
+}
+.to-do .footer .right a{
+  color: #4a4a4a;
+  font-size: 1.5rem;
+  text-decoration: none;
+}
+
 
 /* ========== animation ========== */
 @keyframes glow {
@@ -316,6 +336,7 @@ body{
 
 /* ========== animation ========== */
 @media (max-width: 991px){
+
   .to-do .parent .info .left{
     width: 100%;
   }
@@ -329,6 +350,9 @@ body{
   }
 }
 @media (max-width: 767px){
+  .to-do{
+    padding-bottom: 50px;
+  }
   .to-do .parent{
     border-top-right-radius:initial;
   }
@@ -340,5 +364,8 @@ body{
   }
 }
  
-
-/*TEST=======================*/
+@media (max-width: 500px){
+  .to-do .footer h3{
+    font-size: 1.4rem;
+  }
+}

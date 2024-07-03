@@ -374,6 +374,34 @@ function App() {
           )}
         </div>
       </Container>
+      <div className="footer  d-flex justify-content-center align-items-center">
+        <div className="left p-3 text-center">
+          <p className="m-0">Developed By:</p>
+          <h3 className="m-0">Hesham Abdelazim Kamel</h3>
+        </div>
+        <div className="right d-flex gap-3">
+          <a
+            href="https://github.com/heshamabdelazim"
+            className="icon-github"
+            target="_blank"
+          />
+          <a
+            href="https://www.linkedin.com/in/hesham-abdelazim-678759283/"
+            className="icon-linkedin"
+            target="_blank"
+          />
+          <a
+            href="https://wa.me/+201212005626"
+            className="icon-whatsapp"
+            target="_blank"
+          />
+          <a
+            href="https://www.facebook.com/hesham.abdelazim.94"
+            className="icon-facebook2"
+            target="_blank"
+          />
+        </div>
+      </div>
     </div>
   );
 }
