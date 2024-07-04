@@ -364,8 +364,8 @@ body{
   .to-do .slogan span + span{
     margin-left: 0;
   }
-  .to-do .list li {
-    font-size: 1rem;
+  .to-do .list li{
+    font-size: 1.15rem;
   } 
   .to-do .list li div:nth-child(1){
     gap: 0.33rem !important;
