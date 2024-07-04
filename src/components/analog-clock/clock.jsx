@@ -9,7 +9,7 @@ const Clock = ({ show, time }) => {
 
   //==============useRef
   let numberOfDashes = useRef(120); // this numbers of dashes around all clocks
-  let dashesEveryHr = useRef(numberOfDashes.current / 12); //the clock has 12 hours and I have 120 dashes around so every clock has 10 dashes
+  let dashesEveryHr = useRef(numberOfDashes.current / 12); //the clock has 12 hours and I have 120 dashes around so every hour has 10 dashes
   let dashesEveryMin = useRef(dashesEveryHr.current / 5); // every hour has 10 dashes so 5 Minutes? every minute has 2 dashes
   let hours = useRef(() => {
     const array = [];
@@ -61,7 +61,7 @@ const Clock = ({ show, time }) => {
     time &&
     dashes.current().map((dash, ind) => {
       const dashesStart = min * dashesEveryMin.current; //every minute has 2 dashes so suppose current minute is 30 so number of dashes is 30*2
-      const minutesLength = time.hr * 60 + min + time.min; //example: current min is 30 and user choosed 5 min so the length will be 36
+      const minutesLength = time.hr * 60 + min + time.min; //example: current min is 30 and user choosed 5 min so the length will be 35
       const dashesEnd = minutesLength * dashesEveryMin.current; //every minute has 2 dashes so 36 minute has 72 dashes
 
       if (dash >= dashesStart && dash <= dashesEnd) {

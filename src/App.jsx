@@ -299,7 +299,7 @@ function App() {
               <form>
                 <input
                   type="text"
-                  maxLength="20"
+                  maxLength="35"
                   placeholder="Not lazy? Add Task."
                   onChange={(e) => {
                     inputText.current = e.target.value;
@@ -341,7 +341,6 @@ function App() {
                       </span>
                       {taskOnProgress && taskOnProgress.id == taskObj.id && (
                         <>
-                          {" - "}
                           <span className="tm rounded text-center">
                             {numberModify(timeUi.hr)} :{" "}
                             {numberModify(timeUi.min)} :{" "}
