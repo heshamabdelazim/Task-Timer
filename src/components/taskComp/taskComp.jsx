@@ -24,6 +24,7 @@ const TaskComp = () => {
           checkDom.current.classList.add("done");
         } else {
           dispatch(upDateTimeUi());
+          checkDom.current.classList.remove("done");
         }
       }, 1000); // Update count every 1 second
       return () => clearInterval(intervalId);
