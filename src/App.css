@@ -193,13 +193,22 @@ body{
 .to-do .parent ul li .controls span.icon-stopwatch:hover{
   background-color: var(--color2);
 }
-.to-do .parent ul li .controls span.icon-checkmark:hover{
+.to-do .parent ul li .controls span.icon-checkmark:hover, .done{
   background-color: rgb(106 181 106);
+  color: black;
 }
 .to-do .parent ul li .controls span.icon-moon:hover{
   background-color: #ff8484;;
 }
 
+/* .done{
+  background-color: rgb(106 181 106);
+} */
+
+/* timer */
+.timesUp{
+  animation: timesUp 1s infinite alternate;
+}
 .to-do .parent ul li .tm{
   position: relative;
   padding: 0.2rem;
@@ -330,6 +339,11 @@ body{
   @keyframes to-bot {
     0%,50%{transform: translateY(-190%);}
     100%{transform: translateY(0);}
+  }
+
+  @keyframes timesUp{
+    0%,50%{color: var(--color4);}
+    51%,100%{color:rgb(12, 200, 12)}
   }
 
 /* ========== media ========== */
