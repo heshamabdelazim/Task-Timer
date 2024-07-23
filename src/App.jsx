@@ -27,8 +27,6 @@ function App() {
   });
 
   // ============function
-
-  // ============function
   function resettingInput() {
     inputTextDom.current.value = "";
     inputTextDom.current.focus();
@@ -63,10 +61,8 @@ function App() {
       // in case no task on progress //this is first phase
       return <SetPhase />;
     } else {
-      return <ResetPhase />;
-
       // in case there is a task on progress but user press again
-      // return showTime.id === taskOnProgress.id ? resetPhase() : sorryPhase();
+      return <ResetPhase />;
     }
   }
 
@@ -126,7 +122,7 @@ function App() {
             target="_blank"
           />
           <a
-            href="https://www.linkedin.com/in/hesham-abdelazim-678759283/"
+            href="linkedin.com/in/hesham-abdelazim-kamel-678759283"
             className="icon-linkedin"
             target="_blank"
           />

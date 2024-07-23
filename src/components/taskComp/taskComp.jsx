@@ -20,11 +20,11 @@ const TaskComp = () => {
         if (timeUi.sec == 0 && timeUi.min == 0 && timeUi.hr == 0) {
           // if we got {sec:0 , min:0, hr: 0} timer will stop
           clearInterval(intervalId); //This if timer ended in 00:00:00
-          spanDom.current.classList.add("timesUp");
-          checkDom.current.classList.add("done");
+          spanDom.current.classList.add("timesUp"); //adding animation to the finished timer
+          checkDom.current.classList.add("done"); //focus on the check to press
         } else {
           dispatch(upDateTimeUi());
-          checkDom.current.classList.remove("done");
+          checkDom.current.classList.remove("done"); //This if the user
         }
       }, 1000); // Update count every 1 second
       return () => clearInterval(intervalId);
