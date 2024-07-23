@@ -122,7 +122,7 @@ function App() {
             target="_blank"
           />
           <a
-            href="linkedin.com/in/hesham-abdelazim-kamel-678759283"
+            href="https://www.linkedin.com/in/hesham-abdelazim-kamel-678759283"
             className="icon-linkedin"
             target="_blank"
           />
