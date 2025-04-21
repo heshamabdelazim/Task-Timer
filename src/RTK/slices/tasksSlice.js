@@ -3,8 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const allTasks = createSlice({
   initialState: {
     tasks: [],
-    // showTime: null, //this important when the user press to set his timer
-    showTime: null, //this important when the user press to set his timer
+    popupInfo: null, //this important when the user press to set his timer
     timeUi: null,
   },
   name: "allTasks",
@@ -25,13 +24,14 @@ const allTasks = createSlice({
       });
       state.timeUi = null;
     },
-    //===========showTime actoin
-    setShowTime: (state, action) => {
-      state.showTime = null;
-      state.showTime = action.payload;
+    //===========popupInfo actoin
+    popupDetails: (state, action) => {
+      //this to open the popup with task informatoin
+      state.popupInfo = null;
+      state.popupInfo = action.payload;
     },
     // ===================
-    taskOnProgress: (state, action) => {
+    startProgressTask: (state, action) => {
       //this function loop and update (progress & taskDur & timeUi)
       state.tasks.map((taskObj) => {
         if (taskObj.id == action.payload.id) {
@@ -70,9 +70,8 @@ export const {
   addATask,
   deleteATask,
   resetTasks,
-  setShowTime,
-  deleteShowTime,
-  taskOnProgress,
+  popupDetails,
+  startProgressTask,
   upDateTimeUi,
   clearTimeUi,
 } = allTasks.actions;

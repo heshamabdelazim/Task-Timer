@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { resetTasks, setShowTime } from "../../RTK/slices/tasksSlice";
+import { resetTasks, popupDetails } from "../../RTK/slices/tasksSlice";
 
 const ResetPopup = () => {
   const db = useSelector((state) => state);
@@ -9,7 +9,7 @@ const ResetPopup = () => {
   // function========
   function resetting() {
     dispatch(resetTasks());
-    dispatch(setShowTime(getTaskProgress));
+    dispatch(popupDetails(getTaskProgress));
   }
   return (
     <section className="window position-relative h-50">
@@ -19,7 +19,7 @@ const ResetPopup = () => {
         <button
           className="button"
           onClick={() => {
-            dispatch(setShowTime(null));
+            dispatch(popupDetails(null));
           }}
         >
           Cancel

@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   clearTimeUi,
   deleteATask,
-  setShowTime,
+  popupDetails,
   upDateTimeUi,
 } from "../../RTK/slices/tasksSlice";
 import { useEffect, useRef } from "react";
@@ -83,7 +83,7 @@ const TaskComp = () => {
               title="Set Time"
               onClick={() => {
                 console.log(taskObj);
-                dispatch(setShowTime(taskObj));
+                dispatch(popupDetails(taskObj));
               }}
             />
             <span

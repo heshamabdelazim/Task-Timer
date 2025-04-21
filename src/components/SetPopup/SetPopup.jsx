@@ -1,33 +1,58 @@
 import { useDispatch, useSelector } from "react-redux";
 import Clock from "../analog-clock/clock";
-import { setShowTime, taskOnProgress } from "../../RTK/slices/tasksSlice";
+import { popupDetails, startProgressTask } from "../../RTK/slices/tasksSlice";
 
 const SetPopup = () => {
   const db = useSelector((state) => state);
-  const popupData = db.tasks.showTime;
+  const popupData = db.tasks.popupInfo;
   const dispatch = useDispatch();
 
-  const myTaskUpdate = (min, hr, prog) => {
+  const popupInfo_structure = (min, hr, prog) => {
     //this function return task object to update inputs and send to redux
+    if (hr) {
+      console.log(hr);
+    }
+    if (min) {
+      console.log(min);
+    }
     return {
-      taskName: popupData.taskName,
-      taskDur: {
-        min: min || popupData.taskDur.min,
-        hr: hr || popupData.taskDur.hr,
-      },
-      id: popupData.id,
-      progress: prog || popupData.progress,
+      ...popupData,
+      progress: prog,
+      hr: hr || popupData,
     };
+
+    // return {
+    //   taskName: popupData.taskName,
+    //   taskDur: {
+    //     min: min || popupData.taskDur.min,
+    //     hr: hr || popupData.taskDur.hr,
+    //   },
+    //   id: popupData.id,
+    //   progress: prog || popupData.progress,
+    // };
   };
   // ============function
-  function okClicked() {
-    let taskSetTime; //this will update to be {taskName, taskDur, id, progress}
+  const handleOK = () => {
     // This function will work when the uesr Press (Ok)
-    if (popupData.taskDur.min || popupData.taskDur.hr) {
-      dispatch(taskOnProgress(myTaskUpdate("", "", true)));
-      dispatch(setShowTime(null));
+    const isNot_emptyTime = popupData.taskDur.min || popupData.taskDur.hr; //if min=123 or hr=123
+    let settedTime; //this will update to be {taskName, taskDur, id, progress}
+    if (isNot_emptyTime) {
+      settedTime = popupInfo_structure("", "", true);
+      console.log(settedTime);
+      dispatch(startProgressTask(settedTime));
+      dispatch(popupDetails(null));
     }
-  }
+  };
+
+  const handleMinChange = (e) => {
+    const min = e.target.value;
+
+    //user change min of popup? chosen-popup-info in the redux will re-render
+  };
+  const handleHrChange = (e) => {
+    const hr = e.target.value;
+    console.log(hr);
+  };
 
   return (
     <section className="popup position-relative">
@@ -46,7 +71,10 @@ const SetPopup = () => {
                 step="5"
                 value={popupData.taskDur.min}
                 onChange={
-                  (e) => dispatch(setShowTime(myTaskUpdate(+e.target.value)))
+                  (e) => {
+                    // dispatch(popupDetails(popupInfo_structure(+e.target.value)));
+                    handleMinChange(e);
+                  }
                   //this to dispatch entire task object to update the input
                 }
               />
@@ -59,7 +87,8 @@ const SetPopup = () => {
                 min="0"
                 value={popupData.taskDur.hr}
                 onChange={(e) => {
-                  dispatch(setShowTime(myTaskUpdate("", +e.target.value)));
+                  handleHrChange(e);
+                  // dispatch(popupDetails(popupInfo_structure("", +e.target.value)));
                   //this to dispatch entire task object to update the input
                 }}
               />
@@ -71,17 +100,12 @@ const SetPopup = () => {
         <button
           className="button"
           onClick={() => {
-            dispatch(setShowTime(null));
+            dispatch(popupDetails(null));
           }}
         >
           Cancel
         </button>
-        <button
-          className={`button  bg-danger}`}
-          onClick={() => {
-            okClicked();
-          }}
-        >
+        <button className={`button  bg-danger}`} onClick={handleOK}>
           Ok
         </button>
       </div>
