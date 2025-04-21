@@ -10,11 +10,12 @@ import { useEffect, useRef } from "react";
 const TaskComp = () => {
   const db = useSelector((state) => state);
   const dispatch = useDispatch();
-  const timeUi = db.tasks.timeUi;
+  const timeUi = db.tasks.timeUi; //this is {sec:0, min:0, hr:0}
   const spanDom = useRef();
   const checkDom = useRef();
 
   useEffect(() => {
+    console.log(timeUi, "timeUi");
     if (timeUi) {
       const intervalId = setInterval(() => {
         if (timeUi.sec == 0 && timeUi.min == 0 && timeUi.hr == 0) {
@@ -37,6 +38,7 @@ const TaskComp = () => {
     //This function when the timer work to give number has 2 digits
     return num < 10 ? "0" + num : num;
   }
+
   //
   function puttingTimer(taskObj) {
     const chosenTask = db.tasks.tasks.find((taskObj) => taskObj.progress);
@@ -56,7 +58,7 @@ const TaskComp = () => {
   // function =============
   function checkClicked(taskObj) {
     dispatch(deleteATask(taskObj.id));
-    dispatch(clearTimeUi());
+    // dispatch(clearTimeUi());
     // db.tasks.timeUi && dispatch(clearTimeUi());
   }
 
@@ -80,6 +82,7 @@ const TaskComp = () => {
               className="icon-stopwatch"
               title="Set Time"
               onClick={() => {
+                console.log(taskObj);
                 dispatch(setShowTime(taskObj));
               }}
             />

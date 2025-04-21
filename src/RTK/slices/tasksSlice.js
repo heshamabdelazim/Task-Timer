@@ -30,9 +30,6 @@ const allTasks = createSlice({
       state.showTime = null;
       state.showTime = action.payload;
     },
-    deleteShowTime: (state, action) => {
-      state.showTime = null;
-    },
     // ===================
     taskOnProgress: (state, action) => {
       //this function loop and update (progress & taskDur & timeUi)

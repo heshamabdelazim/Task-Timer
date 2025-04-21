@@ -7,7 +7,7 @@
 - input design
 - ul design
 - li design
-- window design
+- popup design
 - footer
 - animation
 - media
@@ -230,7 +230,7 @@ body{
   border-radius: 6px;
 }
 
-/* ========== window design ========== */
+/* ========== popup design ========== */
 .to-do .window-background{
   width: 100%;
   height: 100%;
@@ -246,7 +246,7 @@ body{
   z-index: 99;
 }
 
-.to-do .window{
+.to-do .popup{
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -257,24 +257,24 @@ body{
   animation: opening var(--transition) forwards;
   overflow: auto;
 }
-.to-do .window :where(h3, h2){
+.to-do .popup :where(h3, h2){
   width: 290px;
   text-align: center;
   /* line-height: 2.6rem; */
 }
-.to-do .window :where(h4, h3){
+.to-do .popup :where(h4, h3){
   color: var(--color1);
 }
 
 
-.to-do .window .inputs{
+.to-do .popup .inputs{
   display: flex;
   gap: 1rem;
   justify-content: center;
 }
 
 
-.to-do .window .inputs :where(input, select) {
+.to-do .popup .inputs :where(input, select) {
   width: 120px;
   padding: 1rem 0rem;
   border-radius: 6px;
@@ -285,15 +285,15 @@ body{
   color: var(--color1);
   font-weight: 500;
 }
-.to-do .window .inputs :where(input, select):focus{
+.to-do .popup .inputs :where(input, select):focus{
   outline: none;
 }
 
-.to-do .window .close-control{
+.to-do .popup .close-control{
   display: flex;
   gap: 1rem;
 }
-.to-do .window .close-control :where( button#cancel, button#ok){
+.to-do .popup .close-control :where( button#cancel, button#ok){
   background-color: var(--color2);
   border: none;
   border-radius: 6px;
@@ -304,7 +304,7 @@ body{
   transition: var(--transition);
   color: var(--color1);
 }
-/* ========== window design ========== */
+/* ========== popup design ========== */
 .to-do .footer{
   width: 100%;
   bottom: 10px;

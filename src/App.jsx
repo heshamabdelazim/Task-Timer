@@ -4,11 +4,11 @@ import { Container } from "react-bootstrap";
 
 import "./icons/style.css";
 import Clock from "./components/analog-clock/clock";
-import SetPhase from "./components/setPhase/setPhase";
 import { useDispatch, useSelector } from "react-redux";
 import { addATask, upDateTimeUi } from "./RTK/slices/tasksSlice";
 import TaskComp from "./components/taskComp/taskComp";
-import ResetPhase from "./components/resetPhase/resetPhase";
+import ResetPopup from "./components/ResetPopup/ResetPhase";
+import SetPopup from "./components/SetPopup/SetPopup";
 
 function App() {
   const db = useSelector((state) => state);
@@ -23,6 +23,7 @@ function App() {
 
   // ===========useEffect
   useEffect(() => {
+    console.log(db.tasks);
     inputTextDom.current.addEventListener("input", buttonValidation);
   });
 
@@ -55,14 +56,14 @@ function App() {
   }
 
   // ============function  (re-useable)
-  function openWindow() {
+  function openPopup() {
     const IsTaskProgress = db.tasks.tasks.find((obj) => obj.progress);
     if (!IsTaskProgress) {
       // in case no task on progress //this is first phase
-      return <SetPhase />;
+      return <SetPopup />;
     } else {
       // in case there is a task on progress but user press again
-      return <ResetPhase />;
+      return <ResetPopup />;
     }
   }
 
@@ -106,7 +107,7 @@ function App() {
             <TaskComp />
           </ul>
           {db.tasks.showTime && (
-            <div className="window-background">{openWindow()}</div>
+            <div className="window-background">{openPopup()}</div>
           )}
         </div>
       </Container>

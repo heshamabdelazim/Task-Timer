@@ -1,18 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteShowTime,
-  resetTasks,
-  setShowTime,
-} from "../../RTK/slices/tasksSlice";
+import { resetTasks, setShowTime } from "../../RTK/slices/tasksSlice";
 
-const ResetPhase = () => {
+const ResetPopup = () => {
   const db = useSelector((state) => state);
   const dispatch = useDispatch();
   const getTaskProgress = db.tasks.tasks.find((taskObj) => taskObj.progress);
 
   // function========
   function resetting() {
-    // dispatch(deleteShowTime());
     dispatch(resetTasks());
     dispatch(setShowTime(getTaskProgress));
   }
@@ -24,7 +19,7 @@ const ResetPhase = () => {
         <button
           className="button"
           onClick={() => {
-            dispatch(deleteShowTime());
+            dispatch(setShowTime(null));
           }}
         >
           Cancel
@@ -42,4 +37,4 @@ const ResetPhase = () => {
   );
 };
 
-export default ResetPhase;
+export default ResetPopup;
