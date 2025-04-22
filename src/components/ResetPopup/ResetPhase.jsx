@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { resetTasks, popupDetails } from "../../RTK/slices/tasksSlice";
+import { resetTasks, setPopupInfo } from "../../RTK/slices/tasksSlice";
 
 const ResetPopup = () => {
   const db = useSelector((state) => state);
@@ -9,17 +9,17 @@ const ResetPopup = () => {
   // function========
   function resetting() {
     dispatch(resetTasks());
-    dispatch(popupDetails(getTaskProgress));
+    dispatch(setPopupInfo(getTaskProgress));
   }
   return (
-    <section className="window position-relative h-50">
+    <section className="popup position-relative h-50">
       <h3 className="m-0">You should concentrate on one task:</h3>
       <h2 className="active text-center m-0">{getTaskProgress.taskName}</h2>
       <div className="close-control ">
         <button
           className="button"
           onClick={() => {
-            dispatch(popupDetails(null));
+            dispatch(setPopupInfo(null));
           }}
         >
           Cancel

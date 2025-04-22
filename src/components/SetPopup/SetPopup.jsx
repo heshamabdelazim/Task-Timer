@@ -1,57 +1,59 @@
 import { useDispatch, useSelector } from "react-redux";
 import Clock from "../analog-clock/clock";
-import { popupDetails, startProgressTask } from "../../RTK/slices/tasksSlice";
+import { setPopupInfo, startProgressTask } from "../../RTK/slices/tasksSlice";
 
 const SetPopup = () => {
-  const db = useSelector((state) => state);
-  const popupData = db.tasks.popupInfo;
+  const popupData = useSelector((state) => state.tasks.popupInfo);
   const dispatch = useDispatch();
 
-  const popupInfo_structure = (min, hr, prog) => {
-    //this function return task object to update inputs and send to redux
-    if (hr) {
-      console.log(hr);
+  const popupInfo_structure = (isUpdatingMin, minOrhr) => {
+    /*
+    this method to return the same popup_info but different minutes / hours
+    whenever the user modify min || hr
+    */
+    if (isUpdatingMin) {
+      return {
+        ...popupData,
+        taskDur: { ...popupData.taskDur, min: minOrhr },
+      };
     }
-    if (min) {
-      console.log(min);
-    }
-    return {
-      ...popupData,
-      progress: prog,
-      hr: hr || popupData,
-    };
-
-    // return {
-    //   taskName: popupData.taskName,
-    //   taskDur: {
-    //     min: min || popupData.taskDur.min,
-    //     hr: hr || popupData.taskDur.hr,
-    //   },
-    //   id: popupData.id,
-    //   progress: prog || popupData.progress,
-    // };
-  };
-  // ============function
-  const handleOK = () => {
-    // This function will work when the uesr Press (Ok)
-    const isNot_emptyTime = popupData.taskDur.min || popupData.taskDur.hr; //if min=123 or hr=123
-    let settedTime; //this will update to be {taskName, taskDur, id, progress}
-    if (isNot_emptyTime) {
-      settedTime = popupInfo_structure("", "", true);
-      console.log(settedTime);
-      dispatch(startProgressTask(settedTime));
-      dispatch(popupDetails(null));
+    if (!isUpdatingMin) {
+      return {
+        ...popupData,
+        taskDur: { ...popupData.taskDur, hr: minOrhr },
+      };
     }
   };
 
   const handleMinChange = (e) => {
-    const min = e.target.value;
-
-    //user change min of popup? chosen-popup-info in the redux will re-render
+    const newMin = +e.target.value; //get the min
+    //update popup-info with a new min
+    const theUpdated_TaskObj = popupInfo_structure(true, newMin);
+    //the dispatch to re-render
+    dispatch(setPopupInfo(theUpdated_TaskObj));
   };
+
+  // ============function
   const handleHrChange = (e) => {
-    const hr = e.target.value;
-    console.log(hr);
+    const newHr = +e.target.value;
+    //update popup-info with a new hr
+    const theUpdated_TaskObj = popupInfo_structure(false, newHr);
+    //the dispatch to re-render
+    dispatch(setPopupInfo(theUpdated_TaskObj));
+  };
+
+  // ============function
+  const handleOK = () => {
+    // This function will work when the uesr Press (Ok)
+    const isNot_emptyTime = popupData.taskDur.min || popupData.taskDur.hr; //if min=123 or hr=123
+    if (isNot_emptyTime) {
+      dispatch(startProgressTask(popupData));
+      dispatch(setPopupInfo(null));
+    }
+  };
+  // ============function
+  const handleCancel = () => {
+    dispatch(setPopupInfo(null));
   };
 
   return (
@@ -70,13 +72,7 @@ const SetPopup = () => {
                 min="0"
                 step="5"
                 value={popupData.taskDur.min}
-                onChange={
-                  (e) => {
-                    // dispatch(popupDetails(popupInfo_structure(+e.target.value)));
-                    handleMinChange(e);
-                  }
-                  //this to dispatch entire task object to update the input
-                }
+                onChange={handleMinChange}
               />
             </div>
             <div className="hr">
@@ -86,23 +82,14 @@ const SetPopup = () => {
                 name="hr"
                 min="0"
                 value={popupData.taskDur.hr}
-                onChange={(e) => {
-                  handleHrChange(e);
-                  // dispatch(popupDetails(popupInfo_structure("", +e.target.value)));
-                  //this to dispatch entire task object to update the input
-                }}
+                onChange={handleHrChange}
               />
             </div>
           </div>
         </div>
       </div>
       <div className="close-control ">
-        <button
-          className="button"
-          onClick={() => {
-            dispatch(popupDetails(null));
-          }}
-        >
+        <button className="button" onClick={handleCancel}>
           Cancel
         </button>
         <button className={`button  bg-danger}`} onClick={handleOK}>

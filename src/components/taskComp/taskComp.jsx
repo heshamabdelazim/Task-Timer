@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   clearTimeUi,
   deleteATask,
-  popupDetails,
+  setPopupInfo,
   upDateTimeUi,
 } from "../../RTK/slices/tasksSlice";
 import { useEffect, useRef } from "react";
@@ -10,15 +10,17 @@ import { useEffect, useRef } from "react";
 const TaskComp = () => {
   const db = useSelector((state) => state);
   const dispatch = useDispatch();
-  const timeUi = db.tasks.timeUi; //this is {sec:0, min:0, hr:0}
+  let timeUi = db.tasks.timeUi; //this is {sec:0, min:0, hr:0}
   const spanDom = useRef();
   const checkDom = useRef();
+  let chosenTask = useRef();
 
   useEffect(() => {
     console.log(timeUi, "timeUi");
     if (timeUi) {
       const intervalId = setInterval(() => {
-        if (timeUi.sec == 0 && timeUi.min == 0 && timeUi.hr == 0) {
+        const isTimesUp = timeUi.sec == 0 && timeUi.min == 0 && timeUi.hr == 0;
+        if (isTimesUp) {
           // if we got {sec:0 , min:0, hr: 0} timer will stop
           clearInterval(intervalId); //This if timer ended in 00:00:00
           spanDom.current.classList.add("timesUp"); //adding animation to the finished timer
@@ -33,6 +35,10 @@ const TaskComp = () => {
     }
   }, [timeUi]);
 
+  useEffect(() => {
+    chosenTask.current = db.tasks.tasks.find((taskObj) => taskObj.progress);
+    console.log(chosenTask);
+  }, []);
   // function
   function numberModify(num) {
     //This function when the timer work to give number has 2 digits
@@ -40,7 +46,7 @@ const TaskComp = () => {
   }
 
   //
-  function puttingTimer(taskObj) {
+  function setTimerFormat(taskObj) {
     const chosenTask = db.tasks.tasks.find((taskObj) => taskObj.progress);
     return (
       chosenTask &&
@@ -56,11 +62,11 @@ const TaskComp = () => {
     );
   }
   // function =============
-  function checkClicked(taskObj) {
+  const handleCheck = (taskObj) => {
+    console.log(taskObj);
     dispatch(deleteATask(taskObj.id));
-    // dispatch(clearTimeUi());
-    // db.tasks.timeUi && dispatch(clearTimeUi());
-  }
+    taskObj.progress && dispatch(clearTimeUi());
+  };
 
   return db.tasks.tasks.length !== 0 ? (
     db.tasks.tasks.map((taskObj, ind) => {
@@ -75,7 +81,7 @@ const TaskComp = () => {
             >
               <span>{ind + 1}</span> <span>-</span> {taskObj.taskName}
             </span>
-            {db.tasks.timeUi && puttingTimer(taskObj)}
+            {db.tasks.timeUi && setTimerFormat(taskObj)}
           </div>
           <div className="controls d-flex align-items-center">
             <span
@@ -83,13 +89,13 @@ const TaskComp = () => {
               title="Set Time"
               onClick={() => {
                 console.log(taskObj);
-                dispatch(popupDetails(taskObj));
+                dispatch(setPopupInfo(taskObj));
               }}
             />
             <span
               className="icon-checkmark"
               ref={checkDom}
-              onClick={() => checkClicked(taskObj)}
+              onClick={() => handleCheck(taskObj)}
             />
           </div>
         </li>

@@ -25,7 +25,7 @@ const allTasks = createSlice({
       state.timeUi = null;
     },
     //===========popupInfo actoin
-    popupDetails: (state, action) => {
+    setPopupInfo: (state, action) => {
       //this to open the popup with task informatoin
       state.popupInfo = null;
       state.popupInfo = action.payload;
@@ -35,11 +35,14 @@ const allTasks = createSlice({
       //this function loop and update (progress & taskDur & timeUi)
       state.tasks.map((taskObj) => {
         if (taskObj.id == action.payload.id) {
-          taskObj.progress = action.payload.progress;
+          taskObj.progress = true;
           taskObj.taskDur = action.payload.taskDur;
           state.timeUi = { ...taskObj.taskDur, sec: 0 };
         }
       });
+    },
+    testClassObj: (state, action) => {
+      state.tasks = [...state.tasks, action.payload];
     },
     upDateTimeUi: (state, action) => {
       //this function will be used to update (timeUi) every 1 sec
@@ -70,7 +73,7 @@ export const {
   addATask,
   deleteATask,
   resetTasks,
-  popupDetails,
+  setPopupInfo,
   startProgressTask,
   upDateTimeUi,
   clearTimeUi,
