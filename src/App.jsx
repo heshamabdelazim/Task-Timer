@@ -4,22 +4,23 @@ import { Container } from "react-bootstrap";
 
 import "./icons/style.css";
 import Clock from "./components/analog-clock/clock";
-import SetPhase from "./components/setPhase/setPhase";
 import { useDispatch, useSelector } from "react-redux";
 import { addATask, upDateTimeUi } from "./RTK/slices/tasksSlice";
 import TaskComp from "./components/taskComp/taskComp";
-import ResetPhase from "./components/resetPhase/resetPhase";
+import ResetPopup from "./components/ResetPopup/ResetPhase";
+import SetPopup from "./components/SetPopup/SetPopup";
+import { Task } from "./components/taskClass/Task";
 
 function App() {
-  const db = useSelector((state) => state);
-  const timeUi = db.tasks.timeUi;
+  const allTasks = useSelector((state) => state.tasks);
+  const timeUi = allTasks.timeUi;
   const dispatch = useDispatch();
 
   // ========useRef
-  let inputText = useRef(), //to add task value
-    inputTextDom = useRef(), //to Ui with add button
+  let inputTextDom = useRef(), //to Ui with add button
     submitDom = useRef(), //this is add button
     taskId = useRef(0); //every task added it will increment
+  // inputText = useRef(), //to add task value
 
   // ===========useEffect
   useEffect(() => {
@@ -44,25 +45,27 @@ function App() {
   function addingTask(e) {
     //adding tasks and reest after
     e.preventDefault();
+
     const myTask = {
-      taskName: inputText.current,
+      taskName: inputTextDom.current.value,
       taskDur: { min: 0, hr: 0 },
       id: ++taskId.current,
       progress: false,
+      isDone: false,
     };
-    inputText.current && dispatch(addATask(myTask));
+    inputTextDom.current.value && dispatch(addATask(myTask));
     resettingInput(); //reset
   }
 
   // ============function  (re-useable)
-  function openWindow() {
-    const IsTaskProgress = db.tasks.tasks.find((obj) => obj.progress);
+  function openPopup() {
+    const IsTaskProgress = allTasks.tasks.find((obj) => obj.progress);
     if (!IsTaskProgress) {
       // in case no task on progress //this is first phase
-      return <SetPhase />;
+      return <SetPopup />;
     } else {
       // in case there is a task on progress but user press again
-      return <ResetPhase />;
+      return <ResetPopup />;
     }
   }
 
@@ -83,7 +86,7 @@ function App() {
                   maxLength="35"
                   placeholder="Not lazy? Add Task."
                   onChange={(e) => {
-                    inputText.current = e.target.value;
+                    inputTextDom.current.value = e.target.value;
                   }}
                   ref={inputTextDom}
                 />
@@ -105,8 +108,8 @@ function App() {
           <ul className="list">
             <TaskComp />
           </ul>
-          {db.tasks.showTime && (
-            <div className="window-background">{openWindow()}</div>
+          {allTasks.popupInfo && (
+            <div className="window-background">{openPopup()}</div>
           )}
         </div>
       </Container>
@@ -131,11 +134,11 @@ function App() {
             className="icon-whatsapp"
             target="_blank"
           />
-          <a
+          {/* <a
             href="https://www.facebook.com/hesham.abdelazim.94"
             className="icon-facebook2"
             target="_blank"
-          />
+          /> */}
         </div>
       </div>
     </div>

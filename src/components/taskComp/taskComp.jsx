@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   clearTimeUi,
   deleteATask,
-  setShowTime,
+  setPopupInfo,
   upDateTimeUi,
 } from "../../RTK/slices/tasksSlice";
 import { useEffect, useRef } from "react";
@@ -10,21 +10,23 @@ import { useEffect, useRef } from "react";
 const TaskComp = () => {
   const db = useSelector((state) => state);
   const dispatch = useDispatch();
-  const timeUi = db.tasks.timeUi;
+  let timeUi = db.tasks.timeUi; //this is {sec:0, min:0, hr:0}
   const spanDom = useRef();
   const checkDom = useRef();
+  let chosenTask = useRef();
 
   useEffect(() => {
     if (timeUi) {
       const intervalId = setInterval(() => {
-        if (timeUi.sec == 0 && timeUi.min == 0 && timeUi.hr == 0) {
+        const isTimesUp = timeUi.sec == 0 && timeUi.min == 0 && timeUi.hr == 0;
+        if (isTimesUp) {
           // if we got {sec:0 , min:0, hr: 0} timer will stop
           clearInterval(intervalId); //This if timer ended in 00:00:00
           spanDom.current.classList.add("timesUp"); //adding animation to the finished timer
-          checkDom.current.classList.add("done"); //focus on the check to press
+          // checkDom.current.classList.add("done"); //focus on the check to press
         } else {
           dispatch(upDateTimeUi());
-          checkDom.current.classList.remove("done"); //This if the user
+          // checkDom.current.classList.remove("done"); //This if the user
         }
       }, 1000); // Update count every 1 second
       return () => clearInterval(intervalId);
@@ -32,13 +34,17 @@ const TaskComp = () => {
     }
   }, [timeUi]);
 
+  useEffect(() => {
+    chosenTask.current = db.tasks.tasks.find((taskObj) => taskObj.progress);
+  }, []);
   // function
   function numberModify(num) {
     //This function when the timer work to give number has 2 digits
     return num < 10 ? "0" + num : num;
   }
+
   //
-  function puttingTimer(taskObj) {
+  function setTimerFormat(taskObj) {
     const chosenTask = db.tasks.tasks.find((taskObj) => taskObj.progress);
     return (
       chosenTask &&
@@ -54,11 +60,10 @@ const TaskComp = () => {
     );
   }
   // function =============
-  function checkClicked(taskObj) {
+  const handleCheck = (taskObj) => {
     dispatch(deleteATask(taskObj.id));
-    dispatch(clearTimeUi());
-    // db.tasks.timeUi && dispatch(clearTimeUi());
-  }
+    taskObj.progress && dispatch(clearTimeUi());
+  };
 
   return db.tasks.tasks.length !== 0 ? (
     db.tasks.tasks.map((taskObj, ind) => {
@@ -73,20 +78,20 @@ const TaskComp = () => {
             >
               <span>{ind + 1}</span> <span>-</span> {taskObj.taskName}
             </span>
-            {db.tasks.timeUi && puttingTimer(taskObj)}
+            {db.tasks.timeUi && setTimerFormat(taskObj)}
           </div>
           <div className="controls d-flex align-items-center">
             <span
               className="icon-stopwatch"
               title="Set Time"
               onClick={() => {
-                dispatch(setShowTime(taskObj));
+                dispatch(setPopupInfo(taskObj));
               }}
             />
             <span
               className="icon-checkmark"
               ref={checkDom}
-              onClick={() => checkClicked(taskObj)}
+              onClick={() => handleCheck(taskObj)}
             />
           </div>
         </li>
