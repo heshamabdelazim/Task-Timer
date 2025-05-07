@@ -1,20 +1,24 @@
 import { useDispatch, useSelector } from "react-redux";
-import { resetTasks, setPopupInfo } from "../../RTK/slices/tasksSlice";
+import { useCallback, useEffect } from "react";
+import { resetTasks, setPopupInfo } from "../../../RTK/slices/tasksSlice";
 
-const ResetPopup = () => {
-  const db = useSelector((state) => state);
+const ResetPopup = ({ redux_hasProgressTask }) => {
+  useEffect(() => console.log("ResetPopup rendered"));
   const dispatch = useDispatch();
-  const getTaskProgress = db.tasks.tasks.find((taskObj) => taskObj.progress);
 
   // function========
-  function resetting() {
+
+  const resetHandler = useCallback(() => {
     dispatch(resetTasks());
-    dispatch(setPopupInfo(getTaskProgress));
-  }
+    dispatch(setPopupInfo(redux_hasProgressTask));
+  }, []);
+
   return (
     <section className="popup position-relative h-50">
       <h3 className="m-0">You should concentrate on one task:</h3>
-      <h2 className="active text-center m-0">{getTaskProgress.taskName}</h2>
+      <h2 className="active text-center m-0">
+        {redux_hasProgressTask.taskName}
+      </h2>
       <div className="close-control ">
         <button
           className="button"
@@ -27,7 +31,7 @@ const ResetPopup = () => {
         <button
           className="button reset"
           onClick={() => {
-            resetting();
+            resetHandler();
           }}
         >
           Reset

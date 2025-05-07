@@ -14,3 +14,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     </Provider>
   </React.StrictMode>
 );
+
+//my method
+
+// Number.prototype.twoDigits = function () {
+//   return this;
+// };
+// console.log(2);

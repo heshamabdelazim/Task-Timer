@@ -9,6 +9,10 @@ export class Task {
   public setId(id: number) {
     this.id = id;
   }
+
+  public static create_plain_object() {
+    return {};
+  }
 }
 
 interface durationObj {
@@ -16,3 +20,5 @@ interface durationObj {
   min: number;
   hr: number;
 }
+
+interface plainTask {}

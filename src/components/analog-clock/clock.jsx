@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import "./clock.css";
+import { useSelector } from "react-redux";
 
-const Clock = ({ show, time }) => {
+const Clock = ({ show }) => {
+  const time = useSelector((state) => state.appManager.timeUi);
+
   //==============useState
   let [sec, setSec] = useState();
   let [min, setMin] = useState();

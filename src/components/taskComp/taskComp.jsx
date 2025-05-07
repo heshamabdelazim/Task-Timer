@@ -6,11 +6,13 @@ import {
   upDateTimeUi,
 } from "../../RTK/slices/tasksSlice";
 import { useEffect, useRef } from "react";
+import TimerPopup from "./TimerPopup";
+import ATask from "./ATask";
 
-const TaskComp = () => {
-  const db = useSelector((state) => state);
+const TaskContainer = () => {
+  const app_redux_manager = useSelector((state) => state.appManager);
   const dispatch = useDispatch();
-  let timeUi = db.tasks.timeUi; //this is {sec:0, min:0, hr:0}
+  let timeUi = app_redux_manager.timeUi; //this is {sec:0, min:0, hr:0}
   const spanDom = useRef();
   const checkDom = useRef();
   let chosenTask = useRef();
@@ -35,74 +37,29 @@ const TaskComp = () => {
   }, [timeUi]);
 
   useEffect(() => {
-    chosenTask.current = db.tasks.tasks.find((taskObj) => taskObj.progress);
-  }, []);
+    console.log("Task comp rendered");
+  });
   // function
-  function numberModify(num) {
-    //This function when the timer work to give number has 2 digits
-    return num < 10 ? "0" + num : num;
-  }
 
-  //
-  function setTimerFormat(taskObj) {
-    const chosenTask = db.tasks.tasks.find((taskObj) => taskObj.progress);
-    return (
-      chosenTask &&
-      chosenTask.id == taskObj.id && (
-        <>
-          <span className="tm rounded text-center" ref={spanDom}>
-            {numberModify(db.tasks.timeUi.hr)} :{" "}
-            {numberModify(db.tasks.timeUi.min)} :{" "}
-            {numberModify(db.tasks.timeUi.sec)}
-          </span>
-        </>
-      )
-    );
-  }
   // function =============
   const handleCheck = (taskObj) => {
     dispatch(deleteATask(taskObj.id));
     taskObj.progress && dispatch(clearTimeUi());
   };
 
-  return db.tasks.tasks.length !== 0 ? (
-    db.tasks.tasks.map((taskObj, ind) => {
-      return (
-        <li
-          key={taskObj.id}
-          className={" d-flex justify-content-between align-items-center gap-2"}
-        >
-          <div className="position-relative d-flex align-items-center gap-3">
-            <span
-              className={` d-flex gap-1 ${taskObj.progress ? "active" : ""}`}
-            >
-              <span>{ind + 1}</span> <span>-</span> {taskObj.taskName}
-            </span>
-            {db.tasks.timeUi && setTimerFormat(taskObj)}
-          </div>
-          <div className="controls d-flex align-items-center">
-            <span
-              className="icon-stopwatch"
-              title="Set Time"
-              onClick={() => {
-                dispatch(setPopupInfo(taskObj));
-              }}
-            />
-            <span
-              className="icon-checkmark"
-              ref={checkDom}
-              onClick={() => handleCheck(taskObj)}
-            />
-          </div>
-        </li>
-      );
-    })
-  ) : (
-    <>
-      <h2 className="lazy">Why are you lazy poor useless? 🐌</h2>
-      {/* <h2 className="huh">Huh? 🐌</h2> */}
-    </>
+  if (app_redux_manager.tasks.length !== 0) {
+    return (
+      <ul className="list">
+        {app_redux_manager.tasks.map((taskObj, ind) => (
+          <ATask />
+        ))}
+      </ul>
+    );
+  }
+  return (
+    <h2 className="lazy">Why are you lazy poor useless? 🐌</h2>
+    // <h2 className="huh">Huh? 🐌</h2>
   );
 };
 
-export default TaskComp;
+export default TaskContainer;
