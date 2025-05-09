@@ -1,24 +1,18 @@
 export class Task {
+  static nextID = 1;
   private id: number;
-  private taskDur: durationObj;
-  private progress: boolean;
-  private isDone: boolean;
-  constructor(id: number) {
-    this.id = id;
-  }
-  public setId(id: number) {
-    this.id = id;
+  private taskName: String;
+  private startTime: number = 0;
+  private endTimeAfter: number = 0;
+  private progress: boolean = false;
+  private isDone: boolean = false;
+
+  constructor(taskName: String) {
+    this.id = Task.nextID++;
+    this.taskName = taskName;
   }
 
-  public static create_plain_object() {
-    return {};
+  public static create_plain_object(taskName: String): {} {
+    return { ...new Task(taskName) };
   }
 }
-
-interface durationObj {
-  sec: number;
-  min: number;
-  hr: number;
-}
-
-interface plainTask {}

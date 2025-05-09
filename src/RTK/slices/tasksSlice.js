@@ -4,46 +4,50 @@ const allTasks = createSlice({
   initialState: {
     tasks: [],
     popupInfo: null, //this important when the user press to set his timer
-    timeUi: null,
+    // timeUi: null,
   },
   name: "allTasks",
   reducers: {
     //==========tasks actoins
     addATask: (state, action) => {
-      state.tasks = [...state.tasks, action.payload];
+      state.tasks.push(action.payload);
     },
+    //===========
     deleteATask: (state, action) => {
       const upDate = state.tasks.filter((obj) => {
         return obj.id !== action.payload;
       });
       state.tasks = upDate;
     },
+    //===========
     resetTasks: (state, action) => {
       state.tasks.map((taskObj) => {
         taskObj.progress = false;
       });
       state.timeUi = null;
     },
-    //===========popupInfo actoin
+    //===========
     setPopupInfo: (state, action) => {
       //this to open the popup with task informatoin
       state.popupInfo = null;
       state.popupInfo = action.payload;
     },
+
     // ===================
     startProgressTask: (state, action) => {
       //this function loop and update (progress & taskDur & timeUi)
-      state.tasks.map((taskObj) => {
+      state.tasks = state.tasks.map((taskObj) => {
         if (taskObj.id == action.payload.id) {
-          taskObj.progress = true;
-          taskObj.taskDur = action.payload.taskDur;
-          state.timeUi = { ...taskObj.taskDur, sec: 0 };
+          taskObj = action.payload;
         }
+        return taskObj;
       });
     },
+    //=========== DELETE it later
     testClassObj: (state, action) => {
       state.tasks = [...state.tasks, action.payload];
     },
+    //===========
     upDateTimeUi: (state, action) => {
       //this function will be used to update (timeUi) every 1 sec
       let secUpdate = state.timeUi.sec - 1;

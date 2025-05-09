@@ -1,18 +1,27 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
+import { deleteATask, setPopupInfo } from "../../RTK/slices/tasksSlice";
+import TimerPopup from "./TimerPopup";
 
-function ATask() {
+const ATask = React.memo(({ taskObj, ind }) => {
+  const spanDom = useRef();
+  const checkDom = useRef();
+
+  const dispatch = useDispatch();
+
+  const handleCheck = (taskObj) => {
+    dispatch(deleteATask(taskObj.id));
+    // taskObj.progress && dispatch(clearTimeUi());
+  };
+
+  useEffect(() => console.log("Atask rendered " + taskObj.taskName));
   return (
-    <li
-      key={taskObj.id}
-      className={" d-flex justify-content-between align-items-center gap-2"}
-    >
+    <li className={" d-flex justify-content-between align-items-center gap-2"}>
       <div className="position-relative d-flex align-items-center gap-3">
         <span className={` d-flex gap-1 ${taskObj.progress ? "active" : ""}`}>
-          <span>{ind + 1}</span> <span>-</span> {taskObj.taskName}
+          <span>{ind + 1}</span> <span>- </span> {taskObj.taskName}
         </span>
-        {app_redux_manager.timeUi && (
-          <TimerPopup taskObj={taskObj} spanDom={spanDom} />
-        )}
+        {taskObj.progress && <TimerPopup taskObj={taskObj} spanDom={spanDom} />}
       </div>
       <div className="controls d-flex align-items-center">
         <span
@@ -30,6 +39,6 @@ function ATask() {
       </div>
     </li>
   );
-}
+});
 
 export default ATask;

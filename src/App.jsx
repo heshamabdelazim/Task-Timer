@@ -5,12 +5,10 @@ import { Container } from "react-bootstrap";
 import "./icons/style.css";
 import Clock from "./components/analog-clock/clock";
 import { useDispatch, useSelector } from "react-redux";
-import { addATask, upDateTimeUi } from "./RTK/slices/tasksSlice";
-import { Task } from "./components/taskClass/Task";
 import Footer from "./components/footer/Footer";
 import TaskForm from "./components/TaskForm/TaskForm";
 import Popup from "./components/Popup/Popup";
-import TaskContainer from "./components/taskComp/taskComp";
+import TaskContainer from "./components/taskComp/TaskContainer";
 
 function App() {
   useEffect(() => {
@@ -34,9 +32,7 @@ function App() {
               <Clock />
             </section>
           </div>
-          <ul className="list">
-            <TaskContainer />
-          </ul>
+          <TaskContainer />
           <Popup />
         </div>
       </Container>

@@ -4,53 +4,44 @@ import {
   setPopupInfo,
   startProgressTask,
 } from "../../../RTK/slices/tasksSlice";
+import { useState } from "react";
+import { calcEndTimeAfter } from "../../../utilis/utilis";
 
 const SetPopup = ({ redux_hasPopupData }) => {
   const dispatch = useDispatch();
-
-  const popupInfo_structure = (isUpdatingMin, minOrhr) => {
-    /*
-    this method to return the same popup_info but different minutes / hours
-    whenever the user modify min || hr
-    */
-    if (isUpdatingMin) {
-      return {
-        ...redux_hasPopupData,
-        taskDur: { ...redux_hasPopupData.taskDur, min: minOrhr },
-      };
-    }
-    if (!isUpdatingMin) {
-      return {
-        ...redux_hasPopupData,
-        taskDur: { ...redux_hasPopupData.taskDur, hr: minOrhr },
-      };
-    }
-  };
+  const [min, setMin] = useState(0);
+  const [hr, setHr] = useState(0);
 
   const handleMinChange = (e) => {
     const newMin = +e.target.value; //get the min
-    //update popup-info with a new min
-    const theUpdated_TaskObj = popupInfo_structure(true, newMin);
-    //the dispatch to re-render
-    dispatch(setPopupInfo(theUpdated_TaskObj));
+    setMin(newMin);
   };
 
   // ============function
   const handleHrChange = (e) => {
     const newHr = +e.target.value;
-    //update popup-info with a new hr
-    const theUpdated_TaskObj = popupInfo_structure(false, newHr);
-    //the dispatch to re-render
-    dispatch(setPopupInfo(theUpdated_TaskObj));
+    setHr(newHr);
   };
 
   // ============function
   const handleOK = () => {
     // This function will work when the uesr Press (Ok)
-    const isNot_emptyTime =
-      redux_hasPopupData.taskDur.min || redux_hasPopupData.taskDur.hr; //if min=123 or hr=123
+    const isNot_emptyTime = min || hr;
     if (isNot_emptyTime) {
+      const milliSecond_bigInt = calcEndTimeAfter(min, hr); //this is BigInt() //600000n
+      const milleSeconds_ofEndTime = Number(milliSecond_bigInt); //Number as redux can't serialize bigInt
+      redux_hasPopupData = {
+        ...redux_hasPopupData,
+        endTimeAfter: milleSeconds_ofEndTime,
+        progress: true,
+        startTime: new Date().getTime(),
+      };
       dispatch(startProgressTask(redux_hasPopupData));
+
+      // const twentyMinutesLater = new Date(now.getTime() + 20 * 60 * 1000)
+      //   console.log(redux_hasPopupData, "redux_hasPopupData");
+
+      //   dispatch(startProgressTask(redux_hasPopupData));
       dispatch(setPopupInfo(null));
     }
   };
@@ -72,7 +63,7 @@ const SetPopup = ({ redux_hasPopupData }) => {
                 type="number"
                 min="0"
                 step="5"
-                value={redux_hasPopupData.taskDur.min}
+                value={min}
                 onChange={handleMinChange}
               />
             </div>
@@ -82,7 +73,7 @@ const SetPopup = ({ redux_hasPopupData }) => {
                 type="number"
                 name="hr"
                 min="0"
-                value={redux_hasPopupData.taskDur.hr}
+                value={hr}
                 onChange={handleHrChange}
               />
             </div>

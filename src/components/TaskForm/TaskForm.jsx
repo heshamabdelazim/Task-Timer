@@ -1,19 +1,22 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { addATask } from "../../RTK/slices/tasksSlice";
+import { Task } from "../taskClass/Task";
 
 function TaskForm() {
   const dispatch = useDispatch();
   // ========useRef
   let inputTextDom = useRef(), //to Ui with add button
-    submitDom = useRef(), //this is add button
-    taskId = useRef(0); //every task added it will increment
+    submitDom = useRef(); //this is add button
   // inputText = useRef(), //to add task value
 
   useEffect(() => {
     inputTextDom.current.addEventListener("input", buttonValidation);
   }, []);
 
+  useEffect(() => {
+    console.log("Task Form Rendered");
+  });
   // ============function
   const buttonValidation = useCallback(() => {
     //when the user start writting
@@ -26,15 +29,8 @@ function TaskForm() {
   const addingTask = useCallback((e) => {
     //adding tasks and reest after
     e.preventDefault();
-    const myTask = {
-      taskName: inputTextDom.current.value,
-      taskDur: { min: 0, hr: 0 },
-      id: ++taskId.current,
-      progress: false,
-      isDone: false,
-    };
+    const myTask = Task.create_plain_object(inputTextDom.current.value);
     inputTextDom.current.value && dispatch(addATask(myTask));
-    // inputTextDom.current.value && dispatch(addATask(new Task(2)));
     resettingInput(); //reset
   }, []);
 
