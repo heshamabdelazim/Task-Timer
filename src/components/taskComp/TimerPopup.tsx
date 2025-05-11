@@ -1,66 +1,53 @@
-import { useCallback, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
-import { taskObj } from "../../utilis/utilis";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { taskObj, twoDigits } from "../../utilis/utilis";
+import { progressHandler, setTime } from "../../RTK/slices/tasksSlice";
 
 interface popupProps{
   taskObj: taskObj,
   spanDom: React.MutableRefObject<undefined>
 }
 function TimerPopup({ taskObj, spanDom }: popupProps) {
-  // const startTime = useRef(taskObj?.startTime);
+  // let [timer, setTimer] = useState({ seconds: 0, minutes: 0, hours: 0, durationTillFinish: 1 });
+  const dispatch = useDispatch();
+  const redux_time = useSelector((state) => state.appManager.time);
+  
   useEffect(() => {
     console.log("TimerPopup Rendered");
-  });
-  console.log(taskObj.startTime)
-  console.log(taskObj.endTimeAfter)
-
+  })
   const reduceEndTime_EverySec = () => {
-    //every time => the EndTime(6000 six sec) - 
-    //calc the exact end time(milli-seconds) from now
-    const now = new Date().getTime(); //in milliseconds
-    const exactEndTime = new Date(taskObj.startTime + taskObj.endTimeAfter).getTime();
-    // the exactEndTime is constant-immutable so it must include startTime that is constant-immutable also
-    // console.log(now);
-    
-    // console.log((exactEndTime-now)/1000/60/60/60, "this is estimated end")
-    // console.log(now/1000/60,"this is now")
-    // console.log((taskEnd-now)/1000);
+    /*
+    the following graph shows time path
+    (1970)============(taskStart)======(my current time goes to the end)>>>=========(exact End deadline)
+    */
+   const exactEnd_Deadline = new Date(taskObj.startTime + taskObj.endTimeAfter).getTime();
+   const now = new Date().getTime(); // in milliseconds & chnages every sec
+    const durationTillFinish = exactEnd_Deadline - now; //milli seconds
+    //note "Modelus" => 70%60 is 10 because you delete all multiples of 60s
+    const seconds = Math.floor((durationTillFinish / 1000) % 60);
+    const minutes = Math.floor((durationTillFinish / 1000/60) % 60);
+    const hours = Math.floor((durationTillFinish / 1000 / 60 / 60) % 60);
+    dispatch(setTime({ seconds, minutes, hours, durationTillFinish }));
   };
 
   useEffect(() => {
     if (taskObj.progress) {
+      const isTimesUp = redux_time?.durationTillFinish < 0;
       const intervalId = setInterval(reduceEndTime_EverySec, 1000);
+      if (isTimesUp) {
+        clearInterval(intervalId);
+         spanDom?.current.classList.add("timesUp"); //adding animation to the finished timer
+        dispatch(progressHandler({...taskObj,progress:false, isDone:true}))
+      }
       return () => clearInterval(intervalId);
-      // Cleanup function to clear the interval when the component unmounts
-
-      //     const intervalId = setInterval(() => {
-      //       const isTimesUp = timeUi.sec == 0 && timeUi.min == 0 && timeUi.hr == 0;
-      //       if (isTimesUp) {
-      //         // if we got {sec:0 , min:0, hr: 0} timer will stop
-      //         clearInterval(intervalId); //This if timer ended in 00:00:00
-      //         spanDom.current.classList.add("timesUp"); //adding animation to the finished timer
-      //         // checkDom.current.classList.add("done"); //focus on the check to press
-      //       } else {
-      //         dispatch(upDateTimeUi());
-      //         // checkDom.current.classList.remove("done"); //This if the user
-      //       }
-      //     }, 1000); // Update count every 1 second
     }
-  }, [taskObj.progress]);
+  }, [taskObj.progress, redux_time?.durationTillFinish]);
 
-  const allTasks = useSelector((state) => state.appManager.tasks);
-  const chosenTask = allTasks.find((taskObj) => taskObj.progress);
-  const twoDigits = useCallback((x) => (x < 10 ? `0${x}` : x), []);
   return (
-    chosenTask &&
-    chosenTask.id == taskObj.id && (
-      <>
         <span className="tm rounded text-center" ref={spanDom}>
-          {twoDigits(chosenTask.hr)} : {twoDigits(chosenTask.min)} :{" "}
-          {twoDigits(chosenTask.sec)}
+          {twoDigits(redux_time?.hours)} : {twoDigits(redux_time?.minutes)} :{" "}
+          {twoDigits(redux_time?.seconds)}
         </span>
-      </>
-    )
   );
 }
 export default TimerPopup;

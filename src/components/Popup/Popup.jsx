@@ -12,12 +12,10 @@ function Popup() {
     console.log("Popup rendered, wether set or reset");
   });
 
-  const redux_allAppStates = useSelector((state) => state.appManager);
-  const redux_hasPopupData = redux_allAppStates.popupInfo;
+  const redux_hasPopupData = useSelector((state) => state.appManager.popupInfo);
+  const redux_allTasks = useSelector((state) => state.appManager.tasks);
   if (redux_hasPopupData) {
-    const redux_hasProgressTask = redux_allAppStates.tasks.find(
-      (task) => task.progress
-    );
+    const redux_hasProgressTask = redux_allTasks.find((task) => task.progress);
     return (
       <div className="window-background">
         {redux_hasProgressTask ? (

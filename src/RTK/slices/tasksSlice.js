@@ -4,7 +4,7 @@ const allTasks = createSlice({
   initialState: {
     tasks: [],
     popupInfo: null, //this important when the user press to set his timer
-    // timeUi: null,
+    time: { seconds: 0, minutes: 0, hours: 0 },
   },
   name: "allTasks",
   reducers: {
@@ -34,7 +34,7 @@ const allTasks = createSlice({
     },
 
     // ===================
-    startProgressTask: (state, action) => {
+    progressHandler: (state, action) => {
       //this function loop and update (progress & taskDur & timeUi)
       state.tasks = state.tasks.map((taskObj) => {
         if (taskObj.id == action.payload.id) {
@@ -43,31 +43,9 @@ const allTasks = createSlice({
         return taskObj;
       });
     },
-    //=========== DELETE it later
-    testClassObj: (state, action) => {
-      state.tasks = [...state.tasks, action.payload];
-    },
     //===========
-    upDateTimeUi: (state, action) => {
-      //this function will be used to update (timeUi) every 1 sec
-      let secUpdate = state.timeUi.sec - 1;
-      let minUpdate = state.timeUi.min;
-      let hrUpdate = state.timeUi.hr;
-
-      if (secUpdate === -1) {
-        //sec end and update
-        secUpdate = 59;
-        --minUpdate;
-      }
-      if (minUpdate === -1) {
-        //min end and update
-        minUpdate = 59;
-        hrUpdate--;
-      }
-      state.timeUi = { min: minUpdate, sec: secUpdate, hr: hrUpdate };
-    },
-    clearTimeUi: (state, action) => {
-      state.timeUi = null;
+    setTime: (state, action) => {
+      state.time = { ...action.payload };
     },
   },
 });
@@ -78,7 +56,6 @@ export const {
   deleteATask,
   resetTasks,
   setPopupInfo,
-  startProgressTask,
-  upDateTimeUi,
-  clearTimeUi,
+  progressHandler,
+  setTime,
 } = allTasks.actions;

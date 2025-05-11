@@ -15,3 +15,5 @@ export interface taskObj {
   progress: boolean;
   isDone: boolean;
 }
+
+export const twoDigits = (x) => (x < 10 ? `0${x}` : x);

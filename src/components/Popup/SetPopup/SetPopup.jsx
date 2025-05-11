@@ -1,9 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import Clock from "../../analog-clock/clock";
-import {
-  setPopupInfo,
-  startProgressTask,
-} from "../../../RTK/slices/tasksSlice";
+import { setPopupInfo, progressHandler } from "../../../RTK/slices/tasksSlice";
 import { useState } from "react";
 import { calcEndTimeAfter } from "../../../utilis/utilis";
 
@@ -36,12 +33,7 @@ const SetPopup = ({ redux_hasPopupData }) => {
         progress: true,
         startTime: new Date().getTime(),
       };
-      dispatch(startProgressTask(redux_hasPopupData));
-
-      // const twentyMinutesLater = new Date(now.getTime() + 20 * 60 * 1000)
-      //   console.log(redux_hasPopupData, "redux_hasPopupData");
-
-      //   dispatch(startProgressTask(redux_hasPopupData));
+      dispatch(progressHandler(redux_hasPopupData));
       dispatch(setPopupInfo(null));
     }
   };
