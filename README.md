@@ -10,3 +10,21 @@
 ![coverage](https://img.shields.io/badge/React-TypeScript-darkblue)
 ![coverage](https://img.shields.io/badge/ES6-Class-red)
 </div>
+
+
+# 📁 Project Structure
+
+```plaintext
+ src/
+   ├── RTK/
+   ├── components/
+   │   ├── Popup/
+   │   ├── TaskForm/
+   │   ├── analog-clock/
+   │   ├── taskClass/
+   │   ├── taskComp/
+   │   └── footer/
+   ├── icons/
+   └── utilis/
+      └── utilis.ts
+```
