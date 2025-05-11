@@ -16,7 +16,6 @@ const ATask = React.memo(({ taskObj, ind }) => {
   const handleCheck = (taskObj) => {
     dispatch(deleteATask(taskObj.id));
     dispatch(setTime(null));
-    // taskObj.progress && dispatch(clearTimeUi());
   };
 
   useEffect(() => console.log("Atask rendered " + taskObj.taskName));
@@ -31,7 +30,9 @@ const ATask = React.memo(({ taskObj, ind }) => {
             {taskObj.taskName}
           </span>
         </span>
-        {taskObj.progress && <TimerPopup taskObj={taskObj} spanDom={spanDom} />}
+        {taskObj.progress && !taskObj.isDone && (
+          <TimerPopup taskObj={taskObj} spanDom={spanDom} />
+        )}
       </div>
       <div className="controls d-flex align-items-center">
         <span

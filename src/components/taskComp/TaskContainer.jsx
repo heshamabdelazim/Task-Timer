@@ -1,16 +1,9 @@
-import { useDispatch, useSelector } from "react-redux";
-import { deleteATask } from "../../RTK/slices/tasksSlice";
-import { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import ATask from "./ATask";
 
 const TaskContainer = () => {
   const allTasks = useSelector((state) => state.appManager.tasks);
-  const dispatch = useDispatch();
-  // let timeUi = allTasks.timeUi; //this is {sec:0, min:0, hr:0}
-
-  useEffect(() => {
-    console.log("Task comp rendered");
-  });
+  allTasks.length > 0 && console.table(allTasks);
 
   return (
     <ul className="list">
