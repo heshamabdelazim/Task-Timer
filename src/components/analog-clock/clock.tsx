@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import "./clock.css";
+import { useSelector } from "react-redux";
 
-const Clock = ({ show, time }) => {
+// interface clockProps{
+//   show:{seconds:number,minutes:number,hours:number,durationTillFinish:number}
+// }
+const Clock = ({ show}:{show:boolean}) => {
+  const time = useSelector((state) => state.appManager.time);
+
   //==============useState
   let [sec, setSec] = useState();
   let [min, setMin] = useState();
@@ -61,7 +67,7 @@ const Clock = ({ show, time }) => {
     time &&
     dashes.current().map((dash, ind) => {
       const dashesStart = min * dashesEveryMin.current; //every minute has 2 dashes so suppose current minute is 30 so number of dashes is 30*2
-      const minutesLength = time.hr * 60 + min + time.min; //example: current min is 30 and user choosed 5 min so the length will be 35
+      const minutesLength = time.hours * 60 + min + time.minutes; //example: current min is 30 and user choosed 5 min so the length will be 35
       const dashesEnd = minutesLength * dashesEveryMin.current; //every minute has 2 dashes so 36 minute has 72 dashes
 
       if (dash >= dashesStart && dash <= dashesEnd) {

@@ -1,0 +1,53 @@
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { taskObj, twoDigits } from "../../utilis/utilis";
+import { progressHandler, setTime } from "../../RTK/slices/tasksSlice";
+
+interface popupProps{
+  taskObj: taskObj,
+  spanDom: React.MutableRefObject<undefined>
+}
+function TimerPopup({ taskObj, spanDom }: popupProps) {
+  // let [timer, setTimer] = useState({ seconds: 0, minutes: 0, hours: 0, durationTillFinish: 1 });
+  const dispatch = useDispatch();
+  const redux_time = useSelector((state) => state.appManager.time);
+  
+  useEffect(() => {
+    console.log("TimerPopup Rendered");
+  })
+  const reduceEndTime_EverySec = () => {
+    /*
+    the following graph shows time path
+    (1970)============(taskStart)======(my current time goes to the end)>>>=========(exact End deadline)
+    */
+   const exactEnd_Deadline = new Date(taskObj.startTime + taskObj.endTimeAfter).getTime();
+   const now = new Date().getTime(); // in milliseconds & chnages every sec
+    const durationTillFinish = exactEnd_Deadline - now; //milli seconds
+    //note "Modelus" => 70%60 is 10 because you delete all multiples of 60s
+    const seconds = Math.floor((durationTillFinish / 1000) % 60);
+    const minutes = Math.floor((durationTillFinish / 1000/60) % 60);
+    const hours = Math.floor((durationTillFinish / 1000 / 60 / 60) % 60);
+    dispatch(setTime({ seconds, minutes, hours, durationTillFinish }));
+  };
+
+  useEffect(() => {
+    if (taskObj.progress) {
+      const isTimesUp = redux_time?.durationTillFinish < 0;
+      const intervalId = setInterval(reduceEndTime_EverySec, 1000);
+      if (isTimesUp) {
+        clearInterval(intervalId);
+         spanDom?.current.classList.add("timesUp"); //adding animation to the finished timer
+        dispatch(progressHandler({...taskObj,progress:false, isDone:true}))
+      }
+      return () => clearInterval(intervalId);
+    }
+  }, [taskObj.progress, redux_time?.durationTillFinish]);
+
+  return (
+        <span className="tm rounded text-center" ref={spanDom}>
+          {twoDigits(redux_time?.hours)} : {twoDigits(redux_time?.minutes)} :{" "}
+          {twoDigits(redux_time?.seconds)}
+        </span>
+  );
+}
+export default TimerPopup;
