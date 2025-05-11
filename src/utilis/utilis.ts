@@ -17,3 +17,5 @@ export interface taskObj {
 }
 
 export const twoDigits = (x) => (x < 10 ? `0${x}` : x);
+
+export const defaultTime = { seconds: 0, minutes: 0, hours: 0 };

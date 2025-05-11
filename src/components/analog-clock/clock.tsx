@@ -31,8 +31,6 @@ const Clock = ({ show}:{show:boolean}) => {
     }
     return array;
   });
-  // console.log(dashesEveryHr.current);
-
   // =========== useEffect for clock movement
   useEffect(() => {
     // time move

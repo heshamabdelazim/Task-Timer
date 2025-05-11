@@ -20,6 +20,7 @@ const SetPopup = ({ redux_hasPopupData }) => {
     setHr(newHr);
   };
 
+  console.log(redux_hasPopupData);
   // ============function
   const handleOK = () => {
     // This function will work when the uesr Press (Ok)
@@ -31,6 +32,7 @@ const SetPopup = ({ redux_hasPopupData }) => {
         ...redux_hasPopupData,
         endTimeAfter: milleSeconds_ofEndTime,
         progress: true,
+        isDone: false,
         startTime: new Date().getTime(),
       };
       dispatch(progressHandler(redux_hasPopupData));

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { taskObj, twoDigits } from "../../utilis/utilis";
+import { defaultTime, taskObj, twoDigits } from "../../utilis/utilis";
 import { progressHandler, setTime } from "../../RTK/slices/tasksSlice";
 
 interface popupProps{
@@ -11,6 +11,7 @@ function TimerPopup({ taskObj, spanDom }: popupProps) {
   // let [timer, setTimer] = useState({ seconds: 0, minutes: 0, hours: 0, durationTillFinish: 1 });
   const dispatch = useDispatch();
   const redux_time = useSelector((state) => state.appManager.time);
+  let { current:audio }:{current:HTMLAudioElement} = useRef();
   
   useEffect(() => {
     console.log("TimerPopup Rendered");
@@ -36,7 +37,9 @@ function TimerPopup({ taskObj, spanDom }: popupProps) {
       const intervalId = setInterval(reduceEndTime_EverySec, 1000);
       if (isTimesUp) {
         clearInterval(intervalId);
-         spanDom?.current.classList.add("timesUp"); //adding animation to the finished timer
+        dispatch(setTime(defaultTime));
+        audio = new Audio("/src/icons/AlarmAudio.wav");
+        audio.play();
         dispatch(progressHandler({...taskObj,progress:false, isDone:true}))
       }
       return () => clearInterval(intervalId);

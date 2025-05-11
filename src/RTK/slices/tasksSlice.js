@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { defaultTime } from "../../utilis/utilis";
 
 const allTasks = createSlice({
   initialState: {
     tasks: [],
     popupInfo: null, //this important when the user press to set his timer
-    time: { seconds: 0, minutes: 0, hours: 0 },
+    time: defaultTime,
   },
   name: "allTasks",
   reducers: {
@@ -22,9 +23,11 @@ const allTasks = createSlice({
     //===========
     resetTasks: (state, action) => {
       state.tasks.map((taskObj) => {
-        taskObj.progress = false;
+        if (taskObj.progress) {
+          taskObj.progress = false;
+        }
       });
-      state.timeUi = null;
+      state.time = null;
     },
     //===========
     setPopupInfo: (state, action) => {
@@ -35,7 +38,7 @@ const allTasks = createSlice({
 
     // ===================
     progressHandler: (state, action) => {
-      //this function loop and update (progress & taskDur & timeUi)
+      //this to modify the progress of a task inside tasks array
       state.tasks = state.tasks.map((taskObj) => {
         if (taskObj.id == action.payload.id) {
           taskObj = action.payload;
