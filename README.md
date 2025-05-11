@@ -1,8 +1,12 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<h1 align="center" color="orange" >WATCH YOUR TIME</h1>
+<h3 bold align="center">$${\color{tan} Do \space not \space be  \space \color \space 
+ \space \color{darkorange} USELESS }$$ </h3>
+ 
+<div align="center">
+  
+![React](https://img.shields.io/badge/Redux-Toolkit-purple)
+![React](https://img.shields.io/badge/Dev-React-blue)
+![React](https://img.shields.io/badge/React-JavaScript-yellow)
+![coverage](https://img.shields.io/badge/React-TypeScript-darkblue)
+![coverage](https://img.shields.io/badge/ES6-Class-red)
+</div>
