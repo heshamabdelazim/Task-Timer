@@ -7,7 +7,6 @@ const ResetPopup = ({ redux_hasProgressTask }) => {
   const dispatch = useDispatch();
 
   // function========
-
   const resetHandler = useCallback(() => {
     dispatch(resetTasks());
     dispatch(setPopupInfo(redux_hasProgressTask));
