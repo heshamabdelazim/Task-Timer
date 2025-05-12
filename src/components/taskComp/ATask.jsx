@@ -6,6 +6,7 @@ import {
   setTime,
 } from "../../RTK/slices/tasksSlice";
 import TimerPopup from "./TimerPopup";
+import { makeTime } from "../../utilis/utilis";
 
 const ATask = React.memo(({ taskObj, ind }) => {
   const spanDom = useRef();
@@ -15,7 +16,7 @@ const ATask = React.memo(({ taskObj, ind }) => {
 
   const handleCheck = (taskObj) => {
     dispatch(deleteATask(taskObj.id));
-    dispatch(setTime(null));
+    dispatch(setTime(makeTime()));
   };
 
   useEffect(() => console.log("Atask rendered " + taskObj.taskName));

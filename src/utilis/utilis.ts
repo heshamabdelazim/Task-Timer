@@ -7,6 +7,22 @@ export const calcEndTimeAfter = (min: number, hr: number): bigint => {
   return theEndTimeAfter;
 };
 
+export const twoDigits = (x) => (x < 10 ? `0${x}` : x);
+
+export const makeTime: funcTime = (sec = 0, min = 0, hr = 0, duration = 0) => {
+  return {
+    seconds: sec,
+    minutes: min,
+    hours: hr,
+    durationTillFinish: duration,
+  };
+};
+
+export const getDeadline = (start: number, endAfter: number): number => {
+  return new Date(start + endAfter).getTime();
+};
+//=============Interfaces
+
 export interface taskObj {
   readonly id: number;
   taskName: String;
@@ -16,6 +32,13 @@ export interface taskObj {
   isDone: boolean;
 }
 
-export const twoDigits = (x) => (x < 10 ? `0${x}` : x);
+export interface makeTime {
+  seconds: number;
+  minutes: number;
+  hours: number;
+  durationTillFinish: number;
+}
 
-export const defaultTime = { seconds: 0, minutes: 0, hours: 0 };
+interface funcTime {
+  (se: number, min: number, hr: number, duration: number): makeTime;
+}

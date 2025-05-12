@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { defaultTime } from "../../utilis/utilis";
+import { makeTime } from "../../utilis/utilis";
 
 const allTasks = createSlice({
   initialState: {
     tasks: [],
     popupInfo: null, //this important when the user press to set his timer
-    time: defaultTime,
+    time: makeTime(),
   },
   name: "allTasks",
   reducers: {

@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { defaultTime, taskObj, twoDigits } from "../../utilis/utilis";
+import {getDeadline, makeTime, taskObj, twoDigits } from "../../utilis/utilis";
 import { progressHandler, setTime } from "../../RTK/slices/tasksSlice";
 
 interface popupProps{
@@ -21,9 +21,8 @@ function TimerPopup({ taskObj, spanDom }: popupProps) {
     the following graph shows time path
     (1970)============(taskStart)======(my current time goes to the end)>>>=========(exact End deadline)
     */
-   const exactEnd_Deadline = new Date(taskObj.startTime + taskObj.endTimeAfter).getTime();
    const now = new Date().getTime(); // in milliseconds & chnages every sec
-    const durationTillFinish = exactEnd_Deadline - now; //milli seconds
+    const durationTillFinish = getDeadline(taskObj.startTime,taskObj.endTimeAfter) - now; //milli seconds
     //note "Modelus" => 70%60 is 10 because you delete all multiples of 60s
     const seconds = Math.floor((durationTillFinish / 1000) % 60);
     const minutes = Math.floor((durationTillFinish / 1000/60) % 60);
@@ -37,8 +36,8 @@ function TimerPopup({ taskObj, spanDom }: popupProps) {
       const intervalId = setInterval(reduceEndTime_EverySec, 1000);
       if (isTimesUp) {
         clearInterval(intervalId);
-        dispatch(setTime(defaultTime));
-        audio = new Audio("/src/icons/AlarmAudio.wav");
+        dispatch(setTime(makeTime()));
+        audio = new Audio("../../icons/AlarmAudio.wav");
         audio.play();
         dispatch(progressHandler({...taskObj,progress:false, isDone:true}))
       }

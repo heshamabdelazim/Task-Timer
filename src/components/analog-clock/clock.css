@@ -32,7 +32,7 @@
     text-align: center;
     z-index: 9;
 }
-.to-do .parent .clock > span::before{
+.to-do .parent .clock span::not(.dash):not(#sec)::before{
     content: "";
     position: absolute;
     top: 0px;
@@ -76,7 +76,7 @@
     outline: 2px solid orange;
 }
 
-.to-do .parent .clock .indicator span{
+.to-do .parent .clock #indicator span{
     position: absolute;
     border-radius: 40px;
     transform-origin: bottom;
@@ -84,18 +84,18 @@
     bottom: 50%;
 }
 
-.to-do .parent .clock .indicator span.sec{
+.to-do .parent .clock #indicator span#sec{
     width: 1px;
     height: 60px;
     background-color: orange;
 }
-.to-do .parent .clock .indicator span.min{
+.to-do .parent .clock #indicator span#min{
     width: 4px;
     height: 70px;
     /* background-color: var(--color1); */
     background-color: lime;
 }
-.to-do .parent .clock .indicator span.hr{
+.to-do .parent .clock #indicator span#hr{
     width: 5px;
     height: 40px;
     background-color: white;
@@ -128,19 +128,19 @@
     font-size: 4rem;
 }
 
-.to-do .parent .clock.showTimer .indicator span.sec{
+.to-do .parent .clock.showTimer #indicator span#sec{
     width: 2px;
     height: 100px;
     background-color: orange;
 }
 
-.to-do .parent .clock.showTimer .indicator span.min{
+.to-do .parent .clock.showTimer #indicator span#min{
     width: 5px;
     height: 105px;
     background-color: var(--color1);
 }
 
-.to-do .parent .clock.showTimer .indicator span.hr{
+.to-do .parent .clock.showTimer #indicator span#hr{
     width: 6px;
     height: 57px;
     background-color: white;

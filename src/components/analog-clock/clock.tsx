@@ -1,120 +1,45 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import "./clock.css";
 import { useSelector } from "react-redux";
+import { makeTime } from "../../utilis/utilis";
+import { PutHoursPositions } from "./PutHoursPositions";
+import ProgressDashes from "./ProgressDashes";
+import Indicators from "./Indicators";
 
-// interface clockProps{
-//   show:{seconds:number,minutes:number,hours:number,durationTillFinish:number}
-// }
-const Clock = ({ show}:{show:boolean}) => {
-  const time = useSelector((state) => state.appManager.time);
 
+const Clock = ({ show=false}:{show:boolean}) => {
+  const time: makeTime = useSelector((state) => state.appManager.time);
+  // console.log(time)
   //==============useState
   let [sec, setSec] = useState();
   let [min, setMin] = useState();
   let [hr, setHr] = useState();
+  // console.log(time.minutes);
 
-  //==============useRef
-  let numberOfDashes = useRef(120); // this numbers of dashes around all clocks
-  let dashesEveryHr = useRef(numberOfDashes.current / 12); //the clock has 12 hours and I have 120 dashes around so every hour has 10 dashes
-  let dashesEveryMin = useRef(dashesEveryHr.current / 5); // every hour has 10 dashes so 5 Minutes? every minute has 2 dashes
-  let hours = useRef(() => {
-    const array = [];
-    for (let i = 1; i <= 12; i++) {
-      array.push(i);
-    }
-    return array;
-  });
-  let dashes = useRef(() => {
-    const array = [];
-    for (let i = 1; i <= numberOfDashes.current; i++) {
-      array.push(i);
-    }
-    return array;
-  });
   // =========== useEffect for clock movement
+/*
+Hello Dev :) please read the following before modifying
+-the current minute is the variable min (Suppose, it is 30)
+-
+*/
   useEffect(() => {
     // time move
     setInterval(clockMove, 1000);
   });
 
   //==============funciton
-  function clockMove() {
+  const clockMove=useCallback(() =>{
     setSec(new Date().getSeconds());
     setMin(new Date().getMinutes());
     setHr(new Date().getHours());
-  }
-
-  //==============funciton
-  const puttingHours = hours.current().map((hour, ind) => {
-    return (
-      <span key={ind} style={{ transform: `rotate(${hour * 30}deg)` }}>
-        <b
-          style={{
-            transform: `rotate(-${hour * 30}deg)`,
-            display: "inline-block", //why this tag <b>? because you need to rotate the number itself
-          }}
-        >
-          {hour}
-        </b>
-      </span>
-    );
-  });
-
-  //==============funciton
-  const puttingDashes =
-    time &&
-    dashes.current().map((dash, ind) => {
-      const dashesStart = min * dashesEveryMin.current; //every minute has 2 dashes so suppose current minute is 30 so number of dashes is 30*2
-      const minutesLength = time.hours * 60 + min + time.minutes; //example: current min is 30 and user choosed 5 min so the length will be 35
-      const dashesEnd = minutesLength * dashesEveryMin.current; //every minute has 2 dashes so 36 minute has 72 dashes
-
-      if (dash >= dashesStart && dash <= dashesEnd) {
-        return (
-          <span
-            key={ind}
-            style={{
-              transform: `rotate(${dash * (360 / numberOfDashes.current)}deg)`,
-            }}
-            className="dash"
-          >
-            <b
-              id={dash}
-              style={{
-                transform: `rotate(90deg)`,
-                display: "inline-block",
-              }}
-            />
-          </span>
-        );
-      }
-    });
-
+  },[])
+  // console.log(dashes());
+  
   return (
     <section className={`clock position-relative ${show ? "showTimer" : ""}`}>
-      {puttingHours}
-      {time && <div className="dashes">{puttingDashes && puttingDashes}</div>}
-      <div className="indicator">
-        <span
-          style={{
-            transform: ` rotate(${((hr * 60 + min) * 360) / 720}deg)`,
-          }}
-          // This mathmatic code is converting hr to min and adding rest of minutes then use it to rotate out of 360 deg
-          // You need 720 min, to rotate one turn 360 deg
-          className="hr"
-        />
-        <span
-          style={{
-            transform: ` rotate(${min * 6}deg)`,
-          }}
-          className="min"
-        />
-        <span
-          style={{
-            transform: ` rotate(${sec * 6}deg)`,
-          }}
-          className="sec"
-        />
-      </div>
+      <PutHoursPositions currentMinute />
+      {time && <ProgressDashes time={time} currentMinute={min} />}
+      <Indicators sec={sec} min={min} hr={hr}/>
 
       {/* <h5 className="position-absolute">{new Date().getFullYear()}</h5> */}
     </section>
