@@ -27,7 +27,7 @@ const allTasks = createSlice({
           taskObj.progress = false;
         }
       });
-      state.time = null;
+      state.time = makeTime();
     },
     //===========
     setPopupInfo: (state, action) => {

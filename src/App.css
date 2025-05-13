@@ -260,6 +260,8 @@ body{
 .to-do .popup :where(h3, h2){
   width: 290px;
   text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
   /* line-height: 2.6rem; */
 }
 .to-do .popup :where(h4, h3){

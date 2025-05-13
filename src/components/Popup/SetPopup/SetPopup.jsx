@@ -1,32 +1,37 @@
 import { useDispatch, useSelector } from "react-redux";
 import Clock from "../../analog-clock/clock";
-import { setPopupInfo, progressHandler } from "../../../RTK/slices/tasksSlice";
-import { useState } from "react";
-import { calcEndTimeAfter } from "../../../utilis/utilis";
+import {
+  setPopupInfo,
+  progressHandler,
+  setTime,
+} from "../../../RTK/slices/tasksSlice";
+import { calcEndTimeAfter, makeTime } from "../../../utilis/utilis";
 
 const SetPopup = ({ redux_hasPopupData }) => {
   const dispatch = useDispatch();
-  const [min, setMin] = useState(0);
-  const [hr, setHr] = useState(0);
+  const time = useSelector((state) => state.appManager.time);
 
   const handleMinChange = (e) => {
     const newMin = +e.target.value; //get the min
-    setMin(newMin);
+    dispatch(setTime({ ...time, minutes: newMin }));
   };
 
   // ============function
   const handleHrChange = (e) => {
     const newHr = +e.target.value;
-    setHr(newHr);
+    dispatch(setTime({ ...time, hours: newHr }));
+  };
+  const handleCancel = (e) => {
+    dispatch(setPopupInfo(null));
+    dispatch(setTime(makeTime()));
   };
 
-  console.log(redux_hasPopupData);
   // ============function
   const handleOK = () => {
     // This function will work when the uesr Press (Ok)
-    const isNot_emptyTime = min || hr;
+    const isNot_emptyTime = time.minutes || time.hours;
     if (isNot_emptyTime) {
-      const milliSecond_bigInt = calcEndTimeAfter(min, hr); //this is BigInt() //600000n
+      const milliSecond_bigInt = calcEndTimeAfter(time.minutes, time.hours); //this is BigInt() //600000n
       const milleSeconds_ofEndTime = Number(milliSecond_bigInt); //Number as redux can't serialize bigInt
       redux_hasPopupData = {
         ...redux_hasPopupData,
@@ -44,7 +49,7 @@ const SetPopup = ({ redux_hasPopupData }) => {
     <section className="popup position-relative">
       <h3>Task Duration</h3>
       <div className="clock-set d-flex gap-2 flex-column align-items-center justify-content-around ">
-        <Clock show={true} time={redux_hasPopupData.taskDur} />
+        <Clock show={true} />
         <div className="w-100">
           <h2 className="active text-center m-0">
             {redux_hasPopupData.taskName}
@@ -57,7 +62,7 @@ const SetPopup = ({ redux_hasPopupData }) => {
                 type="number"
                 min="0"
                 step="5"
-                value={min}
+                value={time.minutes}
                 onChange={handleMinChange}
               />
             </div>
@@ -67,7 +72,7 @@ const SetPopup = ({ redux_hasPopupData }) => {
                 type="number"
                 name="hr"
                 min="0"
-                value={hr}
+                value={time.hours}
                 onChange={handleHrChange}
               />
             </div>
@@ -75,7 +80,7 @@ const SetPopup = ({ redux_hasPopupData }) => {
         </div>
       </div>
       <div className="close-control ">
-        <button className="button" onClick={() => dispatch(setPopupInfo(null))}>
+        <button className="button" onClick={handleCancel}>
           Cancel
         </button>
         <button className={`button  bg-danger}`} onClick={handleOK}>

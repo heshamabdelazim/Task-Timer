@@ -9,19 +9,14 @@ import Indicators from "./Indicators";
 
 const Clock = ({ show=false}:{show:boolean}) => {
   const time: makeTime = useSelector((state) => state.appManager.time);
-  // console.log(time)
+  // console.log(time);
+  
   //==============useState
   let [sec, setSec] = useState();
   let [min, setMin] = useState();
   let [hr, setHr] = useState();
-  // console.log(time.minutes);
 
   // =========== useEffect for clock movement
-/*
-Hello Dev :) please read the following before modifying
--the current minute is the variable min (Suppose, it is 30)
--
-*/
   useEffect(() => {
     // time move
     setInterval(clockMove, 1000);
@@ -33,15 +28,13 @@ Hello Dev :) please read the following before modifying
     setMin(new Date().getMinutes());
     setHr(new Date().getHours());
   },[])
-  // console.log(dashes());
-  
+
+  const isThereTime :boolean= time.minutes>0||time.hours>0
   return (
     <section className={`clock position-relative ${show ? "showTimer" : ""}`}>
-      <PutHoursPositions currentMinute />
-      {time && <ProgressDashes time={time} currentMinute={min} />}
+      <PutHoursPositions/>
+      {isThereTime && <ProgressDashes time={time} currentMinute={min} />}
       <Indicators sec={sec} min={min} hr={hr}/>
-
-      {/* <h5 className="position-absolute">{new Date().getFullYear()}</h5> */}
     </section>
   );
 };

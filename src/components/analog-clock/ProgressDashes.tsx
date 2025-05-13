@@ -12,9 +12,11 @@ function ProgressDashes({time,currentMinute}:{time:makeTime, currentMinute:numbe
     //suppose there's 3 minutes left so the following code will make array of 6 elements => means 6 dashes later
     return Array.from({ length: dashesNumbers }, (_, i) => i); //output [0,1,2,3,4,5,6]
   }, [time.minutes])
+  // console.log("outside");
   
   const isThereTime:number = time.minutes || time.hours;
   if (isThereTime) {
+    // console.log(isThereTime,"inside");
     //startTime =currentMinute 
     return progressDashes_array().map((dashNum) => {
       const aDash_number = ((currentMinute * dashesEveryMin) + dashNum);

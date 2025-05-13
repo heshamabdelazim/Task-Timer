@@ -5,17 +5,14 @@ import { progressHandler, setTime } from "../../RTK/slices/tasksSlice";
 
 interface popupProps{
   taskObj: taskObj,
-  spanDom: React.MutableRefObject<undefined>
+  checkDom: React.MutableRefObject<undefined>
 }
-function TimerPopup({ taskObj, spanDom }: popupProps) {
+function TimerPopup({ taskObj, checkDom }: popupProps) {
   // let [timer, setTimer] = useState({ seconds: 0, minutes: 0, hours: 0, durationTillFinish: 1 });
   const dispatch = useDispatch();
   const redux_time = useSelector((state) => state.appManager.time);
   let { current:audio }:{current:HTMLAudioElement} = useRef();
-  
-  useEffect(() => {
-    console.log("TimerPopup Rendered");
-  })
+
   const reduceEndTime_EverySec = () => {
     /*
     the following graph shows time path
@@ -34,10 +31,13 @@ function TimerPopup({ taskObj, spanDom }: popupProps) {
     if (taskObj.progress) {
       const isTimesUp = redux_time?.durationTillFinish < 0;
       const intervalId = setInterval(reduceEndTime_EverySec, 1000);
+      checkDom.current.classList.remove("done");
       if (isTimesUp) {
+        console.log(isTimesUp)
         clearInterval(intervalId);
+        checkDom.current.classList.add("done");
         dispatch(setTime(makeTime()));
-        audio = new Audio("../../icons/AlarmAudio.wav");
+        audio = new Audio("/src/icons/AlarmAudio.wav");
         audio.play();
         dispatch(progressHandler({...taskObj,progress:false, isDone:true}))
       }
@@ -46,7 +46,7 @@ function TimerPopup({ taskObj, spanDom }: popupProps) {
   }, [taskObj.progress, redux_time?.durationTillFinish]);
 
   return (
-        <span className="tm rounded text-center" ref={spanDom}>
+        <span className="tm rounded text-center">
           {twoDigits(redux_time?.hours)} : {twoDigits(redux_time?.minutes)} :{" "}
           {twoDigits(redux_time?.seconds)}
         </span>
