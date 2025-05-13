@@ -4,7 +4,6 @@ import { Container } from "react-bootstrap";
 
 import "./icons/style.css";
 import Clock from "./components/analog-clock/clock";
-import { useDispatch, useSelector } from "react-redux";
 import Footer from "./components/footer/Footer";
 import TaskForm from "./components/TaskForm/TaskForm";
 import Popup from "./components/Popup/Popup";

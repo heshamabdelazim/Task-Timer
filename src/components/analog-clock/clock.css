@@ -19,7 +19,6 @@
     justify-content: center;
     align-items: center;
     box-shadow: 0px 0px 25px 0px #0000008f, inset 5px 5px 10px 0px #ffffff7a, inset -5px -9px 13px 3px #4040406b;
-    
 }
 
 .to-do .parent .clock > span{
@@ -32,7 +31,8 @@
     text-align: center;
     z-index: 9;
 }
-.to-do .parent .clock span::not(.dash):not(#sec)::before{
+/* .to-do .parent .clock span::not(.dash):not(#sec)::before{*/
+.to-do .parent .clock span.hr::before{
     content: "";
     position: absolute;
     top: 0px;
@@ -57,16 +57,15 @@
 
 /* ========== indicators ============ */
 
-.to-do .parent .clock .indicator{
+.to-do .parent .clock #indicator{
     width: 6px;
     height: 6px;
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    
 }
-.to-do .parent .clock .indicator::before{
+.to-do .parent .clock #indicator::before{
     content: "";
     width: 100%;
     height: 100%;
@@ -101,7 +100,6 @@
     background-color: white;
 }
 
-
 .to-do .parent .clock h5{
     top: 50%;
     left: 50%;
@@ -110,8 +108,6 @@
     letter-spacing: 0.3rem;
     font-size: 3rem;
 }
-
-
 
 /* ========== incase showDom ========== */
 
