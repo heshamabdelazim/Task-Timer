@@ -22,6 +22,7 @@
    │   ├── TaskForm/
    │   ├── analog-clock/
    │   ├── taskClass/
+   │   │  └── Task.ts
    │   ├── taskComp/
    │   └── footer/
    ├── icons/
