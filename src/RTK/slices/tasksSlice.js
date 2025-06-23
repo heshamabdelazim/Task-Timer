@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { makeTime } from "../../utilis/utilis";
+import { sortingOptionsArr } from "../../utilis/sorting";
 
 const allTasks = createSlice({
   initialState: {
@@ -46,9 +47,18 @@ const allTasks = createSlice({
         return taskObj;
       });
     },
+
     //===========
     setTime: (state, action) => {
       state.time = { ...action.payload };
+    },
+
+    //===========
+    sorting: (state, action) => {
+      console.log(action.payload);
+      sortingOptionsArr.map((ele) => {
+        if (action.payload === ele.value) ele.method();
+      });
     },
   },
 });
@@ -61,4 +71,5 @@ export const {
   setPopupInfo,
   progressHandler,
   setTime,
+  sorting,
 } = allTasks.actions;

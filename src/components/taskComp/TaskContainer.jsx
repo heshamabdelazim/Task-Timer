@@ -4,6 +4,7 @@ import ATask from "./ATask";
 const TaskContainer = () => {
   const allTasks = useSelector((state) => state.appManager.tasks);
   allTasks.length > 0 && console.table(allTasks);
+  console.log(allTasks);
 
   return (
     <ul className="list">

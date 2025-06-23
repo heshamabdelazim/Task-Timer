@@ -8,7 +8,6 @@ interface popupProps{
   checkDom: React.MutableRefObject<undefined>
 }
 function TimerPopup({ taskObj, checkDom }: popupProps) {
-  // let [timer, setTimer] = useState({ seconds: 0, minutes: 0, hours: 0, durationTillFinish: 1 });
   const dispatch = useDispatch();
   const redux_time = useSelector((state) => state.appManager.time);
   let { current:audio }:{current:HTMLAudioElement} = useRef();
@@ -33,7 +32,6 @@ function TimerPopup({ taskObj, checkDom }: popupProps) {
       const intervalId = setInterval(reduceEndTime_EverySec, 1000);
       checkDom.current.classList.remove("done");
       if (isTimesUp) {
-        console.log(isTimesUp)
         clearInterval(intervalId);
         checkDom.current.classList.add("done");
         dispatch(setTime(makeTime()));

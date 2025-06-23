@@ -8,9 +8,9 @@ function Popup() {
    This component default returns null but if the redux has popupData 
    this component will return either <SetPopup/> or <ResetPopup/>
   */
-  useEffect(() => {
-    console.log("Popup rendered, wether set or reset");
-  });
+  // useEffect(() => {
+  //   console.log("Popup rendered, wether set or reset");
+  // });
 
   const redux_hasPopupData = useSelector((state) => state.appManager.popupInfo);
   const redux_allTasks = useSelector((state) => state.appManager.tasks);

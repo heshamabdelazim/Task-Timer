@@ -18,7 +18,7 @@ const ATask = React.memo(({ taskObj, ind }) => {
     dispatch(setTime(makeTime()));
   };
 
-  useEffect(() => console.log("Atask rendered " + taskObj.taskName));
+  // useEffect(() => console.log("Atask rendered " + taskObj.taskName));
   return (
     <li
       className={
@@ -30,6 +30,7 @@ const ATask = React.memo(({ taskObj, ind }) => {
         <div className={` d-flex gap-1 ${taskObj.progress ? "active" : ""}`}>
           <span>{ind + 1}</span> <span>- </span>{" "}
           <span
+            className="taskName"
             style={{ textDecoration: taskObj.isDone ? "line-through" : "none" }}
           >
             {taskObj.taskName}

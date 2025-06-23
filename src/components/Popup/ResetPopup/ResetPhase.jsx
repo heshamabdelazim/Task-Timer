@@ -3,7 +3,7 @@ import { useCallback, useEffect } from "react";
 import { resetTasks, setPopupInfo } from "../../../RTK/slices/tasksSlice";
 
 const ResetPopup = ({ redux_hasProgressTask }) => {
-  useEffect(() => console.log("ResetPopup rendered"));
+  // useEffect(() => console.log("ResetPopup rendered"));
   const dispatch = useDispatch();
 
   // function========

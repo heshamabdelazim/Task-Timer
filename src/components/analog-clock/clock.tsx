@@ -9,7 +9,6 @@ import Indicators from "./Indicators";
 
 const Clock = ({ show=false}:{show:boolean}) => {
   const time: makeTime = useSelector((state) => state.appManager.time);
-  // console.log(time);
   
   //==============useState
   let [sec, setSec] = useState();

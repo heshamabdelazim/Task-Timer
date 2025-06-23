@@ -4,7 +4,8 @@
 - defulat 
 - background design 
 - App design
-- input design
+- text input design
+- Sort Comp
 - ul design
 - li design
 - popup design
@@ -25,6 +26,7 @@ body{
   --color3: #446173;
   --color4: #1E3D59;
   --color5: #021826;
+  --green:  #00ff00;
   --transition: 0.6s;
 }
 
@@ -96,7 +98,7 @@ body{
   margin-left: 1rem;
 }
 
-/* ========== input design ========== */
+/* ========== text input design ========== */
 
 .to-do .parent form{
   width: 100%;
@@ -136,6 +138,45 @@ body{
   color: black;
 }
 
+/* ========== Sort Comp ========== */
+select#sortParent{
+  margin-top: 1rem;
+  /* animation: bg 1s infinite linear; */
+  /* background-size: 70%; */
+  /* ====== the icon*/
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%23444' d='M8 12L2 6h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px ;
+  background-size: 15px;
+  -webkit-appearance: none; 
+  -moz-appearance: none;    
+  appearance: none;         
+  /* ===== */
+  background-color: var(--color3);
+  border: none;
+  transition: var(--transition);
+  padding: 0.6rem;
+  &:focus{
+    background-color: var(--color3);
+    outline: none;
+  }
+  &::picker(select){
+    color: white;
+  }
+}
+
+select#sortParent option{
+  &:hover{
+    background-color: white;
+  }
+  &:disabled{
+    color: var(--color4);
+  }
+  &:checked{
+  color: var(--green);
+  font-size: 1.3rem;
+  }
+}
 
 /* ========== ul design ========== */
 .to-do .parent ul{
@@ -167,6 +208,8 @@ body{
   color: var(--color1);
   padding: 0.8rem 0;
   animation: opening var(--transition) forwards;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .to-do .parent ul li:not(:last-child){
   border-bottom: 2px solid var(--color5);
@@ -369,10 +412,10 @@ body{
     padding-bottom: 50px;
   } */
   .to-do .parent{
-    border-top-right-radius:6px;
-  }
+    border-top-right-radius: 12rem;
+    border-top-left-radius: 12rem;  }
   .to-do .parent .info{
-  flex-direction: column;
+    flex-direction: column-reverse;
   }
   .to-do .parent form input[type="text"]{
     font-size: 1.15rem;

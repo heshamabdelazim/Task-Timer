@@ -14,9 +14,9 @@ function TaskForm() {
     inputTextDom.current.addEventListener("input", buttonValidation);
   }, []);
 
-  useEffect(() => {
-    console.log("Task Form Rendered");
-  });
+  // useEffect(() => {
+  //   console.log("Task Form Rendered");
+  // });
   // ============function
   const buttonValidation = useCallback(() => {
     //when the user start writting
