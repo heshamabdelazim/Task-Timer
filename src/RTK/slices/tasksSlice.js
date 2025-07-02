@@ -55,9 +55,13 @@ const allTasks = createSlice({
 
     //===========
     sorting: (state, action) => {
-      console.log(action.payload);
+      // console.log(action.payload);
+
       sortingOptionsArr.map((ele) => {
-        if (action.payload === ele.value) ele.method();
+        if (action.payload === ele.value) {
+          console.log(ele.method);
+          state.tasks = ele.method(state.tasks);
+        }
       });
     },
   },

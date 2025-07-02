@@ -2,8 +2,6 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { sorting } from '../../RTK/slices/tasksSlice';
 import { sortingOptionsArr } from '../../utilis/sorting';
-// import { sortAZ, sortDefault, sortDone, sortNotDone, sortZA } from '../../utilis/sorting';
-
  
 
 function SortInput() {
@@ -12,7 +10,7 @@ function SortInput() {
   return (
       <select name="sortParent" id="sortParent" className='b-0' onChange={(e)=>dispatch(sorting(e.target.value))}>
       <option value="head" disabled>Sort List</option>
-      {sortingOptionsArr.map(ele => (<option key={ ele.i} value={ele.value}>{ele.text }</option>))}
+      {sortingOptionsArr.map(ele => (<option key={ ele.id} value={ele.value}>{ele.text }</option>))}
     </select>
   )
 }
