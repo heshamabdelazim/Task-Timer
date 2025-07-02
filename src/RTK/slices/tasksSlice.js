@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { makeTime } from "../../utilis/utilis";
+import { sortingOptionsArr } from "../../utilis/sorting";
 
 const allTasks = createSlice({
   initialState: {
     tasks: [],
     popupInfo: null, //this important when the user press to set his timer
-    time: makeTime(),
+    time: makeTime(), //{seconds, minutes, hours, durationTillFinish}
   },
   name: "allTasks",
   reducers: {
@@ -13,6 +14,7 @@ const allTasks = createSlice({
     addATask: (state, action) => {
       state.tasks.push(action.payload);
     },
+
     //===========
     deleteATask: (state, action) => {
       const upDate = state.tasks.filter((obj) => {
@@ -20,6 +22,12 @@ const allTasks = createSlice({
       });
       state.tasks = upDate;
     },
+
+    //===========
+    setTime: (state, action) => {
+      state.time = { ...action.payload };
+    },
+
     //===========
     resetTasks: (state, action) => {
       state.tasks.map((taskObj) => {
@@ -29,6 +37,7 @@ const allTasks = createSlice({
       });
       state.time = makeTime();
     },
+
     //===========
     setPopupInfo: (state, action) => {
       //this to open the popup with task informatoin
@@ -46,9 +55,14 @@ const allTasks = createSlice({
         return taskObj;
       });
     },
+
     //===========
-    setTime: (state, action) => {
-      state.time = { ...action.payload };
+    sorting: (state, action) => {
+      sortingOptionsArr.map((ele) => {
+        if (action.payload === ele.value) {
+          state.tasks = ele.method(state.tasks);
+        }
+      });
     },
   },
 });
@@ -61,4 +75,5 @@ export const {
   setPopupInfo,
   progressHandler,
   setTime,
+  sorting,
 } = allTasks.actions;

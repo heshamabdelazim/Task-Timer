@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import "./App.css";
 import { Container } from "react-bootstrap";
 
@@ -8,6 +8,7 @@ import Footer from "./components/footer/Footer";
 import TaskForm from "./components/TaskForm/TaskForm";
 import Popup from "./components/Popup/Popup";
 import TaskContainer from "./components/taskComp/TaskContainer";
+import SortComp from "./components/sortInput/SortComp";
 
 function App() {
   useEffect(() => {
@@ -26,6 +27,7 @@ function App() {
                 <span className="text-warning mb-0 ">watch your time.</span>
               </div>
               <TaskForm />
+              <SortComp />
             </section>
             <section className="rig">
               <Clock />

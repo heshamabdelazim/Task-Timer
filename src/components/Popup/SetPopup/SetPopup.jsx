@@ -32,7 +32,7 @@ const SetPopup = ({ redux_hasPopupData }) => {
     const isNot_emptyTime = time.minutes || time.hours;
     if (isNot_emptyTime) {
       const milliSecond_bigInt = calcEndTimeAfter(time.minutes, time.hours); //this is BigInt() //600000n
-      const milleSeconds_ofEndTime = Number(milliSecond_bigInt); //Number as redux can't serialize bigInt
+      const milleSeconds_ofEndTime = Number(milliSecond_bigInt); //Numbers in redux can't serialize bigInt
       redux_hasPopupData = {
         ...redux_hasPopupData,
         endTimeAfter: milleSeconds_ofEndTime,
