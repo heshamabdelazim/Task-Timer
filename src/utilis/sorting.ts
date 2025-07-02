@@ -9,8 +9,8 @@ interface optionsArr {
 
 export const sortingOptionsArr: optionsArr[] = [
   { id: increase++, value: "default", text: "Default", method: sortDefault },
-  { id: increase++, value: "az", text: "A-Z", method: sortAZ },
-  { id: increase++, value: "za", text: "Z-A", method: sortZA },
+  // { id: increase++, value: "az", text: "A-Z", method: sortAZ },
+  // { id: increase++, value: "za", text: "Z-A", method: sortZA },
   { id: increase++, value: "done", text: "Done", method: sortDone },
   { id: increase++, value: "notDone", text: "Not Done", method: sortNotDone },
   //add more same opjects for more (sorts) and create new methods below
@@ -39,8 +39,6 @@ export const sortingOptionsArr: optionsArr[] = [
 
 export function sortDefault(arr): taskObj[] {
   //(selection sort algorithm) => find the smallest every time and swap its place
-  // inputs is [{id:5},{id:3},{id:2},{id:4},{id:1}]
-  // output is [{id:1},{id:2},{id:3},{id:4},{id:5}]
 
   const finalArr: taskObj[] = [];
   let indexMove: number = 1;
@@ -53,8 +51,6 @@ export function sortDefault(arr): taskObj[] {
     }
     const isLastStep = indexMove === arr.length - 1;
     if (isLastStep) {
-      console.log(smallest.obj);
-
       finalArr.push(smallest.obj);
       arr.splice(smallest.index, 1); //the array reduced
       indexMove = 0; //reset to loop again
@@ -63,20 +59,7 @@ export function sortDefault(arr): taskObj[] {
       indexMove++;
     }
   }
-  console.log(finalArr);
   return finalArr;
-}
-
-//  ==============
-export function sortAZ(arr: taskObj[]): taskObj[] {
-  console.log("this is sortAZ");
-  return arr;
-}
-
-//  ==============
-export function sortZA(arr: taskObj[]): taskObj[] {
-  console.log("this is sortZA");
-  return arr;
 }
 
 //  ==============
@@ -84,7 +67,6 @@ export function sortDone(arr: taskObj[]): taskObj[] {
   const sorted = arr.slice().sort((a, b) => {
     return b.isDone - a.isDone;
   });
-  console.log(sorted);
   return sorted;
 }
 
@@ -93,6 +75,17 @@ export function sortNotDone(arr: taskObj[]): taskObj[] {
   const sorted = arr.sort((a, b) => {
     return a.isDone - b.isDone;
   });
-  console.log(sorted);
   return sorted;
 }
+
+// //  ==============
+// export function sortAZ(arr: taskObj[]): taskObj[] {
+//   console.log("this is sortAZ");
+//   return arr;
+// }
+
+// //  ==============
+// export function sortZA(arr: taskObj[]): taskObj[] {
+//   console.log("this is sortZA");
+//   return arr;
+// }
