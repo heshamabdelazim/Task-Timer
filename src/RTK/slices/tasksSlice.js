@@ -10,7 +10,11 @@ const allTasks = createSlice({
   },
   name: "allTasks",
   reducers: {
-    //==========tasks actoins
+    //==========tasks actions
+    setTasks: (state, action) => {
+      state.tasks = action.payload || [];
+    },
+
     addATask: (state, action) => {
       state.tasks.push(action.payload);
     },
@@ -76,4 +80,5 @@ export const {
   progressHandler,
   setTime,
   sorting,
+  setTasks,
 } = allTasks.actions;

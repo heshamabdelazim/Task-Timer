@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { addATask } from "../../RTK/slices/tasksSlice";
-import { Task } from "../taskClass/Task";
 
 function TaskForm() {
   const dispatch = useDispatch();
@@ -26,12 +25,30 @@ function TaskForm() {
   }, []);
 
   // ============function
-  const addingTask = useCallback((e) => {
-    //adding tasks and reest after
+  const addingTask = useCallback(async (e) => {
+    //adding tasks and reset after
     e.preventDefault();
-    const myTask = Task.create_plain_object(inputTextDom.current.value);
-    inputTextDom.current.value && dispatch(addATask(myTask));
-    resettingInput(); //reset
+    const name = inputTextDom.current.value;
+    console.log(name);
+
+    if (!name) return;
+
+    try {
+      const res = await fetch("/api/tasks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ taskName: name }),
+      });
+      if (!res.ok) {
+        console.error("Failed to create task", await res.text());
+        return;
+      }
+      const createdTask = await res.json();
+      dispatch(addATask(createdTask));
+      resettingInput(); //reset
+    } catch (err) {
+      console.error("Error creating task", err);
+    }
   }, []);
 
   // ============function

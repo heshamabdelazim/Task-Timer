@@ -13,9 +13,18 @@ const ATask = React.memo(({ taskObj, ind }) => {
   const { current: center_flex } = useRef("d-flex align-items-center gap-2");
   const dispatch = useDispatch();
 
-  const handleCheck = (taskObj) => {
-    dispatch(deleteATask(taskObj.id));
-    dispatch(setTime(makeTime()));
+  const handleCheck = async (taskObj) => {
+    try {
+      const res = await fetch(`/api/tasks/${taskObj.id}`, { method: "DELETE" });
+      if (!res.ok && res.status !== 204) {
+        console.error("Failed to delete task", await res.text());
+        return;
+      }
+      dispatch(deleteATask(taskObj.id));
+      dispatch(setTime(makeTime()));
+    } catch (err) {
+      console.error("Error deleting task", err);
+    }
   };
 
   // useEffect(() => console.log("Atask rendered " + taskObj.taskName));
